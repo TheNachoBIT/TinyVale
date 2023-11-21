@@ -1,0 +1,10 @@
+program {
+	
+	com myValue int = 6;
+
+	myValue += 2;
+	myValue += 4;
+	myValue += 8;
+
+	return myValue;
+}

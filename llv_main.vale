@@ -1,0 +1,7 @@
+program {
+	com myValue i32 = 6;
+	add myValue, 2;
+	add myValue, 4;
+	add myValue, 8;
+	llreturn myValue;
+}
