@@ -178,12 +178,11 @@ int Lexer::GetIdentifier()
 	else if(IsIdentifier("COMPARE")) return Token::Compare;
 
 	else if(IsIdentifier("if")) return Token::If;
-	else if(IsIdentifier("then")) return Token::Then;
 	else if(IsIdentifier("else")) return Token::Else;
 
 	else if(IsIdentifier("return")) return Token::Return;
 
-	else if(IsIdentifier("proc")) return Token::Procedure;
+	else if(IsIdentifier("func") || IsIdentifier("funky")) return Token::Procedure;
 
 	else if(IsIdentifier("comstore")) return Token::ComStore;
 
@@ -196,6 +195,8 @@ int Lexer::GetIdentifier()
 
 	else if(IsIdentifier("block")) return Token::Block;
 	else if(IsIdentifier("goto")) return Token::Goto;
+
+	else if(IsIdentifier("exported")) return Token::Exported;
 
 	return Token::Identifier;
 }

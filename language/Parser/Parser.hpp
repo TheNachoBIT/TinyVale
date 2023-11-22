@@ -1004,9 +1004,22 @@ struct Parser {
 
 		Lexer::GetNextToken();
 
+		std::string name = Lexer::IdentifierStr;
+
+		Lexer::GetNextToken();
+
 		if(Lexer::CurrentToken == '[') {
 			Parser::currentAttributes = ParseAttributes();
 		}
+
+		// TODO: Add Arguments to Programs/Exported Functions.
+		if(Lexer::CurrentToken != '(') { ExprError("Expected '(' in program/exported function."); }
+
+		Lexer::GetNextToken();
+
+		if(Lexer::CurrentToken != ')') { ExprError("Expected ')' in program/exported function."); }
+
+		Lexer::GetNextToken();
 
 		if(Lexer::CurrentToken != '{') { ExprError("'{' not found."); }
 
@@ -1018,7 +1031,7 @@ struct Parser {
 
 			std::unique_ptr<AST::Expression> e = ParseExpression();
 
-			if(Lexer::CurrentToken != ';') { ExprError("Expected ';' to end instruction inside program."); }
+			if(Lexer::CurrentToken != ';') { ExprError("Expected ';' to end instruction inside program/exported function."); }
 
 			all_instructions.push_back(std::move(e));
 
@@ -1027,7 +1040,7 @@ struct Parser {
 			Lexer::GetNextToken();
 		}
 
-		return std::make_unique<AST::Program>(std::move(all_instructions), Parser::currentAttributes);
+		return std::make_unique<AST::Program>(name, std::move(all_instructions), Parser::currentAttributes);
 	}
 
 	static std::unique_ptr<AST::Procedure> ParseProcedure() {
@@ -1174,20 +1187,34 @@ struct Parser {
 
 		StartMainTargetSystem();
 
-		std::unique_ptr<AST::Program> MainProgram = nullptr;
+		std::vector<std::unique_ptr<AST::Program>> allPrograms;
 
 		while (Lexer::CurrentToken != Token::EndOfFile) {
 
 			Lexer::GetNextToken();
 
-			if (Lexer::CurrentToken == Token::EndOfFile) 	break;
-			if (Lexer::CurrentToken == Token::Program) 		MainProgram = std::move(HandleProgram());
-			if (Lexer::CurrentToken == Token::Procedure) 	HandleProcedure();
+			if (Lexer::CurrentToken == Token::EndOfFile) { break; }
+
+			if (Lexer::CurrentToken == Token::Exported) {
+				Lexer::GetNextToken();
+
+				if(Lexer::CurrentToken == Token::Procedure) {
+					allPrograms.push_back(std::move(HandleProgram()));
+				}
+				else {
+					ExprError("Other 'exported' types aren't currently supported yet.");
+				}
+			}
+
+			if (Lexer::CurrentToken == Token::Program) { allPrograms.push_back(std::move(HandleProgram())); }
+			if (Lexer::CurrentToken == Token::Procedure) { HandleProcedure(); }
 		}
 
 		//std::cout << "CodeGen...\n";
 
-		MainProgram->codegen();
+		for(auto const& i: allPrograms) {
+			i->codegen();
+		}
 
 		if(build) {
 

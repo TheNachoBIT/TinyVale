@@ -1,4 +1,4 @@
-program {
+exported funky main() {
 	
 	com myValue int = 6;
 

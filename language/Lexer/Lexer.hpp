@@ -29,27 +29,28 @@ enum Token
 	Compare = -15,
 
 	If = -16,
-	Then = -17,
-	Else = -18,
+	Else = -17,
 
-	Return = -19,
+	Return = -18,
 
-	Procedure = -20,
+	Procedure = -19,
 
-	ComStore = -21,
+	ComStore = -20,
 
-	Mem = -22,
-	LoadMem = -23,
-	MemStore = -24,
+	Mem = -21,
+	LoadMem = -22,
+	MemStore = -23,
 
-	IntCast = -25,
-	To = -26,
+	IntCast = -24,
+	To = -25,
 
-	While = -27,
-	Do = -28,
+	While = -26,
+	Do = -27,
 
-	Block = -29,
-	Goto = -30,
+	Block = -28,
+	Goto = -29,
+
+	Exported = -30
 };
 
 enum LexerIsInside {

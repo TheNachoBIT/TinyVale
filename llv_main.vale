@@ -1,4 +1,4 @@
-program {
+program main() {
 	com myValue i32 = 6;
 	add myValue, 2;
 	add myValue, 4;
@@ -7,10 +7,10 @@ program {
 		
 		add myValue, 1;
 		
-		if COMPARE.IsLessThan(myValue, 100) then
+		if COMPARE.IsLessThan(myValue, 100) {
 			
 			goto LoopdiLoop;
-		end;
+		};
 
 	};
 

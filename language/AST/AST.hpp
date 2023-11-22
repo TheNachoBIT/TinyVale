@@ -1445,11 +1445,13 @@ struct AST {
 
 	struct Program {
 
+		std::string programName;
+
 		EXPR_OBJ_VECTOR() all_instructions;
 
 		Attributes attrs;
 
-		Program(EXPR_OBJ_VECTOR() all_instructions, Attributes attrs) : all_instructions(std::move(all_instructions)), attrs(attrs) {}
+		Program(std::string programName, EXPR_OBJ_VECTOR() all_instructions, Attributes attrs) : programName(programName), all_instructions(std::move(all_instructions)), attrs(attrs) {}
 
 		llvm::Function* codegen();
 
@@ -1457,7 +1459,9 @@ struct AST {
 
 			slash_t_count = 0;
 
-			std::string res = "program {\n";
+			std::string res = "program ";
+			res += programName;
+			res += "() {\n";
 
 			slash_t_count += 1;
 
