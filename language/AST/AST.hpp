@@ -1236,7 +1236,7 @@ struct AST {
 			res += "if ";
 			
 			res += condition->ToLLVale();
-			res += " then\n";
+			res += " {\n";
 
 			slash_t_count += 1;
 
@@ -1254,7 +1254,7 @@ struct AST {
 
 			if(else_body.size() != 0) {
 				
-				res += GetSlashT() + "else then\n";
+				res += GetSlashT() + "else {\n";
 	
 				slash_t_count += 1;
 	
@@ -1271,7 +1271,7 @@ struct AST {
 				slash_t_count -= 1;
 			}
 
-			res += GetSlashT() + "end;\n";
+			res += GetSlashT() + "};\n";
 			
 			return res;
 		}
