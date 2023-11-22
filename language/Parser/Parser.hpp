@@ -575,8 +575,8 @@ struct Parser {
 
 		auto condition = ParseExpression();
 
-		if(Lexer::CurrentToken != Token::Then) {
-			ExprError("Expected 'then' in if block.");
+		if(Lexer::CurrentToken != '{') {
+			ExprError("Expected '{' in if block.");
 		}
 
 		Lexer::GetNextToken();
@@ -610,7 +610,7 @@ struct Parser {
 
 				else_body.push_back(std::move(if_b));
 			}
-			else if(Lexer::CurrentToken == Token::Then) {
+			else if(Lexer::CurrentToken == '{') {
 
 				Lexer::GetNextToken();
 
@@ -628,7 +628,7 @@ struct Parser {
 				}
 			}
 			else {
-				ExprError("Expected 'if' or 'then' in else block.");
+				ExprError("Expected 'if' or '{' in else block.");
 			}
 		}
 

@@ -6,5 +6,12 @@ program {
 	myValue += 4;
 	myValue += 8;
 
+	block LoopdiLoop {
+
+		myValue += 1;
+
+		if COMPARE.IsLessThan(myValue, 100) { goto LoopdiLoop; };
+	};
+
 	return myValue;
 }

@@ -3,5 +3,16 @@ program {
 	add myValue, 2;
 	add myValue, 4;
 	add myValue, 8;
+	block LoopdiLoop {
+		
+		add myValue, 1;
+		
+		if COMPARE.IsLessThan(myValue, 100) then
+			
+			goto LoopdiLoop;
+		end;
+
+	};
+
 	llreturn myValue;
 }
