@@ -174,3 +174,64 @@ if(Lexer::CurrentToken == Token::INSERT-TOKEN-HERE)
 ```
 
 ### ```static int Position```
+
+Has the current position of where the Lexer is in your Vale code. Its measure unit is in characters, and shows how far it is from the starting point.
+
+Let's show an example of how it works:
+
+```
+exported func main()
+#       ^
+#       |
+```
+
+Let's suppose that the Lexer is here. We're in the first line of our Vale Code. You just used "Lexer::GetNextToken()" in the Parser and the result from "Lexer::CurrentToken" is 'exported'. Because 'exported' has 8 characters, the Lexer is currently in position '8'.
+
+```
+exported func main()
+#            ^
+#            |
+```
+
+Now let's do "Lexer::GetNextToken()" again. We found out that it's a 'func' keyword, all that jazz... Because it skips spaces, new lines, and characters that aren't really important, it goes forward 1 character and does nothing with it.
+
+So, our last position we measured (8) + the space we skipped (1) + 'func' (4) = 13. So we're now in position '13'.
+
+If we add an X amount of spaces in between our keywords, let's say, 5 spaces, for demonstration purposes.
+
+```
+exported     func     main()
+#                ^
+#                |
+```
+
+Because we added more characters, the position in this case will increase if we pass the Lexer again. New Lines and Tabs are also characters ('\n', '\t', '\r'), so each line of code will guarantee the count to be increased by 1 once we hit the end of it.
+
+```
+# And comments will also increase the Position count.
+#    ^
+#    |
+#    Position: 5
+```
+
+### ```static int Line```
+
+Shows in what line of code the Lexer is currently in.
+
+This count increases by one each time the Lexer sees a new line chatacter ('\n').
+
+```
+exported func main() { 		# This is the first line, so starts as "1"
+							# If the lexer is right here where this comment is. Line will be equals to "2".
+	com aVariable int = 10;	# Line = 3
+							# Line = 4
+	aVariable += 2;			# Line = 5
+							# And so on...
+}
+```
+
+### ```static int Column```
+
+Shows in what column the Lexer is located.
+
+This acts the same as Position, with the difference being that once the Lexer hits a new line, its count will be reseted back to "1".
