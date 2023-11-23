@@ -10,6 +10,167 @@ Once that's done, the Parser will start getting the next token with ```Lexer::Ge
 
 So to recap, the Lexer is designed to be used as a toolkit by other processes (in this case, the only one using it is the Parser, so far), rather than being its own thing.
 
-## Code
+# Code
 
-*wip lol*
+### All Token Types (so far)
+
+This section is self explanatory. These are all the token types that are available so far.
+
+```
+enum Token
+{
+	EndOfFile = -1,
+	Program = -2,
+
+	String = -5,
+	Number = -6,
+
+	Identifier = -7,
+
+	Com = -8,
+
+	LLReturn = -9,
+
+	Add = -10,
+	Sub = -11,
+
+	And = -12,
+	Or = -13,
+	Xor = -14,
+
+	Compare = -15,
+
+	If = -16,
+	Else = -17,
+
+	Return = -18,
+
+	Procedure = -19,
+
+	ComStore = -20,
+
+	Mem = -21,
+	LoadMem = -22,
+	MemStore = -23,
+
+	IntCast = -24,
+	To = -25,
+
+	While = -26,
+	Do = -27,
+
+	Block = -28,
+	Goto = -29,
+
+	Exported = -30
+};
+```
+
+These are in the negatives because tokens act as "negative" characters, so you can check for both characters and tokens in the same process without having to code two different scenarios.
+
+For example, in the Parser, to check if the token is an identifier, you can do:
+
+```
+// Check if the Token is an Identifier.
+if(Lexer::CurrentToken == Token::Identifier) {
+	// ...
+}
+```
+
+...and to check if there's a semicolon, you can do:
+
+```
+// Check if there's a semicolon.
+if(Lexer::CurrentToken == ';') {
+	// ...
+}
+```
+
+...all in the same process!
+
+### The "LexerIsInside" enum
+
+This enum is mostly a way to tell the Lexer where it is in the Parser, if it is inside of a program or inside of a function. The use of this can be found inside of the Lexer struct.
+
+```
+enum LexerIsInside {
+	AProgram,
+	AFunction
+};
+```
+
+## The "Lexer" struct
+
+This is the heart of the entire Lexer, where all of the functions and variables dedicated to it are.
+
+### ```static std::string Content```
+
+Where the entire code loaded from one or more .vale files is stored.
+
+### ```static std::string IdentifierStr```
+
+This contains the current or last identifier's name is stored. So to get the name of a variable or function, in the Parser you can simply do:
+
+```
+// Just in case, let's check if there's an identifier in the first place.
+if(Lexer::CurrentToken != Token::Identifier) {
+	// If there is no identifier, throw a parsing/lexing error.
+	ExprError("Expected identifier.");
+}
+
+// Got the name of the variable/function!
+std::string getName = Lexer::IdentifierStr;
+```
+
+### ```static std::string NumValString```
+
+This acts like IdentifierStr, but for numbers instead.
+
+Why this is a string instead of an integer or a float? Because it's easier to work with, specially when you get into hexadecimal territory. The Lexer can just grab any number type in form of a string, and later on in the Parser we can just convert it into whatever type we want or need. This is also more compact in terms of code size, because otherwise you could have to split all of the possible functionality for each and individual number types, one for ints, other one for floats, other for hex, etc.
+
+```
+if(Lexer::NumValString.find(".") != std::string::npos) {
+	// Found float/decimal!
+}
+else if(Lexer::NumValString.find("x") != std::string::npos) {
+	// Found hex!
+}
+else {
+	// Found int!
+}
+
+// ...
+```
+
+If an int is found for example, we can simply use ```std::stoi``` to convert it to int.
+
+```
+int finalNumber = std::stoi(Lexer::NumValString);
+```
+
+### ```static std::string StringString```
+
+I have to admit, this is a funny name lol
+
+But there's a reason of why is it named like this: This is a string that gets the current/last string from your code.
+
+```
+myString str = "Hello!";
+#                 ^
+#                 |
+#              This one
+```
+
+Its functionality works the same, with the same way of getting the info.
+
+### ```static int CurrentToken```
+
+Contains the Current Token.
+
+This value is heavily used for the Parser to check what type of token or character did you found. So if you're going to add anything new, this is one of the most important variables you should know about.
+
+```
+if(Lexer::CurrentToken == Token::INSERT-TOKEN-HERE)
+```
+
+### ```static int Position```
