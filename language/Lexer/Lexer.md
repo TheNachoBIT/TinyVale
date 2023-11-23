@@ -235,3 +235,30 @@ exported func main() { 		# This is the first line, so starts as "1"
 Shows in what column the Lexer is located.
 
 This acts the same as Position, with the difference being that once the Lexer hits a new line, its count will be reseted back to "1".
+
+### ```static std::string line_as_string```
+
+Contains the current line in form of a string. Characters will keep being added to this the further the Lexer goes. Once it reaches to the end of the line, it gets copied and pushed back to all_lines_vector and it clears itself out.
+
+```
+exported func main() {			# line_as_string = "exported func main() {\n"
+								# line_as_string = "\n"
+	com aVariable int = 10; 	# line_as_string = "com aVariable int = 10;\n"
+								# line_as_string = "\n"
+	aVariable += 2;				# line_as_string = "aVariable += 2;\n"
+								# line_as_string = "\n"
+}								# line_as_string = "}\n"
+```
+
+```
+exported func main() {			# line_as_string = "exported func main() {\n"
+								# line_as_string = "\n"
+	com aVariable int = 10; 	# line_as_string = "com "
+#      ^
+#      |
+#   Lexer is here.
+```
+
+### ```static std::vector<std::string> all_lines_vector```
+
+Contains all of the lines collected from line_as_string.
