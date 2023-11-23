@@ -161,7 +161,7 @@ myString str = "Hello!";
 #              This one
 ```
 
-Its functionality works the same, with the same way of getting the info.
+Its functionality is the same as NumValString and IdentifierStr, with the same way of getting the info.
 
 ### ```static int CurrentToken```
 
