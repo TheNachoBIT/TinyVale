@@ -16,7 +16,7 @@ So to recap, the Lexer is designed to be used as a toolkit by other processes (i
 
 This section is self explanatory. These are all the token types that are available so far.
 
-```
+```c++
 enum Token
 {
 	EndOfFile = -1,
@@ -70,7 +70,7 @@ These are in the negatives because tokens act as "negative" characters, so you c
 
 For example, in the Parser, to check if the token is an identifier, you can do:
 
-```
+```c++
 // Check if the Token is an Identifier.
 if(Lexer::CurrentToken == Token::Identifier) {
 	// ...
@@ -79,7 +79,7 @@ if(Lexer::CurrentToken == Token::Identifier) {
 
 ...and to check if there's a semicolon, you can do:
 
-```
+```c++
 // Check if there's a semicolon.
 if(Lexer::CurrentToken == ';') {
 	// ...
@@ -92,7 +92,7 @@ if(Lexer::CurrentToken == ';') {
 
 This enum is mostly a way to tell the Lexer where it is in the Parser, if it is inside of a program or inside of a function. The use of this can be found inside of the Lexer struct.
 
-```
+```c++
 enum LexerIsInside {
 	AProgram,
 	AFunction
@@ -113,7 +113,7 @@ Where the entire code loaded from one or more .vale files is stored.
 
 This contains the current or last identifier's name is stored. So to get the name of a variable or function, in the Parser you can simply do:
 
-```
+```c++
 // Just in case, let's check if there's an identifier in the first place.
 if(Lexer::CurrentToken != Token::Identifier) {
 	// If there is no identifier, throw a parsing/lexing error.
@@ -130,7 +130,7 @@ This acts like IdentifierStr, but for numbers instead.
 
 Why this is a string instead of an integer or a float? Because it's easier to work with, specially when you get into hexadecimal territory. The Lexer can just grab any number type in form of a string, and later on in the Parser we can just convert it into whatever type we want or need. This is also more compact in terms of code size, because otherwise you could have to split all of the possible functionality for each and individual number types, one for ints, other one for floats, other for hex, etc.
 
-```
+```c++
 if(Lexer::NumValString.find(".") != std::string::npos) {
 	// Found float/decimal!
 }
@@ -146,7 +146,7 @@ else {
 
 If an int is found for example, we can simply use ```std::stoi``` to convert it to int.
 
-```
+```c++
 int finalNumber = std::stoi(Lexer::NumValString);
 ```
 
@@ -171,7 +171,7 @@ Contains the Current Token.
 
 This value is heavily used for the Parser to check what type of token or character did you found. So if you're going to add anything new, this is one of the most important variables you should know about.
 
-```
+```c++
 if(Lexer::CurrentToken == Token::INSERT-TOKEN-HERE)
 ```
 
