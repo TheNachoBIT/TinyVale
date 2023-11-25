@@ -16,29 +16,29 @@ LexerIsInside Lexer::isInside;
 
 int Lexer::LastChar;
 
-void Lexer::AddContent(std::string c)
-{
+void Lexer::AddContent(std::string c) {
+
 	Content += c;
 }
 
-void Lexer::Start()
-{
+void Lexer::Start() {
+
 	Position = -1;
 	Line = 1;
 	Column = 1;
 	LastChar = ' ';
 }
 
-int Lexer::Advance()
-{
+int Lexer::Advance() {
+
 	Position += 1;
 
 	Column += 1;
 
 	line_as_string += Content[Position];
 
-	if (Content[Position] == '\n')
-	{
+	if (Content[Position] == '\n') {
+
 		Line += 1;
 		Column = 1;
 
@@ -50,13 +50,13 @@ int Lexer::Advance()
 	return Content[Position];
 }
 
-void Lexer::GetNextToken()
-{
+void Lexer::GetNextToken() {
+
 	CurrentToken = GetToken();
 }
 
-int Lexer::GetToken()
-{
+int Lexer::GetToken() {
+
 	while (isspace(LastChar)) LastChar = Advance();
 
 	if (isalpha(LastChar) || LastChar == '@') return GetIdentifier();
@@ -94,18 +94,18 @@ int Lexer::GetToken()
 	return ThisChar;
 }
 
-bool Lexer::IsIdentifier(std::string s)
-{
+bool Lexer::IsIdentifier(std::string s) {
+
 	return IdentifierStr == s;
 }
 
-bool Lexer::IsStillIdentifier(char c)
-{
+bool Lexer::IsStillIdentifier(char c) {
+
 	return isalnum(c) || c == '_';
 }
 
-int Lexer::GetChar()
-{
+int Lexer::GetChar() {
+
 	LastChar = Advance();
 
 	NumValString = "";
@@ -122,8 +122,8 @@ int Lexer::GetChar()
 	return Token::Number;
 }
 
-int Lexer::GetString()
-{
+int Lexer::GetString() {
+
 	StringString = "";
 	LastChar = Advance();
 
@@ -141,8 +141,8 @@ int Lexer::GetString()
 	return Token::String;
 }
 
-void Lexer::StringSlash()
-{
+void Lexer::StringSlash() {
+
 	LastChar = Advance();
 
 	if(LastChar == 'n') LastChar = '\n';
@@ -153,8 +153,8 @@ void Lexer::StringSlash()
 	else if(LastChar == '\\') LastChar = '\\';
 }
 
-int Lexer::GetIdentifier()
-{
+int Lexer::GetIdentifier() {
+
 	IdentifierStr = LastChar;
 
 	while (IsStillIdentifier((LastChar = Advance())))
@@ -201,8 +201,8 @@ int Lexer::GetIdentifier()
 	return Token::Identifier;
 }
 
-int Lexer::GetNumber()
-{
+int Lexer::GetNumber() {
+	
 	std::string NumStr;
 
 	do

@@ -99,9 +99,11 @@ enum LexerIsInside {
 };
 ```
 
-## The "Lexer" struct
+## The Lexer Struct
 
 This is the heart of the entire Lexer, where all of the functions and variables dedicated to it are.
+
+## The Lexer Struct's Variables
 
 ### ```static std::string Content```
 
@@ -261,4 +263,89 @@ exported func main() {			# line_as_string = "exported func main() {\n"
 
 ### ```static std::vector<std::string> all_lines_vector```
 
-Contains all of the lines collected from line_as_string.
+Contains all of the lines collected from the line_as_string process.
+
+### ```static LexerIsInside isInside```
+
+Checks where the Lexer currently is. How this variable works is already explained in the LexerIsInside enum's section.
+
+### ```static int lastChar```
+
+Contains the last character obtained by the Lexer.
+
+## The Lexer Struct's Functions
+
+### ```static void AddContent(std::string c)```
+
+Adds/Concatenates the string "c" to the "Content" string.
+
+*Code (Lexer.cpp)*
+
+```c++
+void Lexer::AddContent(std::string c) {
+	Content += c;
+}
+```
+
+### ```static void Start()```
+
+Starts or Restarts (if it already started) the Lexer.
+
+*Code (Lexer.cpp)*
+
+```c++
+void Lexer::Start() {
+	Position = -1;
+	Line = 1;
+	Column = 1;
+	LastChar = ' ';
+}
+```
+
+The whole process goes like this:
+- First it sets the Position to "-1", so when you attempt to get the next token, it inmediately starts at index 0 and doesn't accidentally skip a letter at the beginning (*and don't cause UB*).
+- Then it sets the Line and Column to "1", in order to indicate that we're starting at the beginning of the line, in the first letter.
+- Finally it sets LastChar to a space. This isn't set as "0" because it could accidentally detect it as an end of a file or a string termination, so its best to have a token that doesn't terminate, but it is skippable.
+
+### ```static int Advance()```
+
+Moves the Lexer one character forward, while getting and/or setting all of the necessary information.
+
+[Full Code (Lexer.cpp)](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Lexer/Lexer.cpp#L32)
+
+First, it increments the count of both Position and Column respectively, and uses the Position as an index to get the character we have now and add it to the "line_as_string" (as shown in the line_as_string behavior).
+
+```c++
+Position += 1;
+
+Column += 1;
+
+line_as_string += Content[Position];
+```
+
+Once that's done, it checks if the current character is an end of line:
+
+```c++
+if (Content[Position] == '\n') { //...
+```
+
+And if that condition is true, we increment the Line count by "1", and reset the Column to "1", to tell the Lexer that we're in the beginning of a new line:
+
+```c++
+Line += 1;
+Column = 1;
+```
+
+Finally, we copy and push back the line_as_string to all_lines_vector and clear line_as_string, giving a close to the 'if' statement.
+
+```c++
+all_lines_vector.push_back(line_as_string);
+
+line_as_string.clear();
+```
+
+And we finish the function by returning the current character:
+
+```c++
+return Content[Position];
+```
