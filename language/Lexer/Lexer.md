@@ -243,19 +243,19 @@ This acts the same as Position, with the difference being that once the Lexer hi
 Contains the current line in form of a string. Characters will keep being added to this the further the Lexer goes. Once it reaches to the end of the line, it gets copied and pushed back to all_lines_vector and it clears itself out.
 
 ```
-exported func main() {			# line_as_string = "exported func main() {\n"
-    							# line_as_string = "\n"
-    com aVariable int = 10; 	# line_as_string = "com aVariable int = 10;\n"
-    							# line_as_string = "\n"
-    aVariable += 2;				# line_as_string = "aVariable += 2;\n"
-    							# line_as_string = "\n"
-}								# line_as_string = "}\n"
+exported func main() {          # line_as_string = "exported func main() {\n"
+                                # line_as_string = "\n"
+    com aVariable int = 10;     # line_as_string = "com aVariable int = 10;\n"
+                                # line_as_string = "\n"
+    aVariable += 2;             # line_as_string = "aVariable += 2;\n"
+                                # line_as_string = "\n"
+}                               # line_as_string = "}\n"
 ```
 
 ```
-exported func main() {			# line_as_string = "exported func main() {\n"
-								# line_as_string = "\n"
-    com aVariable int = 10; 	# line_as_string = "com "
+exported func main() {          # line_as_string = "exported func main() {\n"
+                                # line_as_string = "\n"
+    com aVariable int = 10;     # line_as_string = "com "
 #      ^
 #      |
 #   Lexer is here.
