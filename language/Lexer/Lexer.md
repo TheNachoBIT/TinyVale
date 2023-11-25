@@ -224,11 +224,11 @@ This count increases by one each time the Lexer sees a new line chatacter ('\n')
 
 ```
 exported func main() { 		# This is the first line, so starts as "1"
-							# If the lexer is right here where this comment is. Line will be equals to "2".
-	com aVariable int = 10;	# Line = 3
-							# Line = 4
-	aVariable += 2;			# Line = 5
-							# And so on...
+    						# If the lexer is right here where this comment is. Line will be equals to "2".
+    com aVariable int = 10;	# Line = 3
+    						# Line = 4
+    aVariable += 2;			# Line = 5
+    						# And so on...
 }
 ```
 
@@ -244,18 +244,18 @@ Contains the current line in form of a string. Characters will keep being added 
 
 ```
 exported func main() {			# line_as_string = "exported func main() {\n"
-								# line_as_string = "\n"
-	com aVariable int = 10; 	# line_as_string = "com aVariable int = 10;\n"
-								# line_as_string = "\n"
-	aVariable += 2;				# line_as_string = "aVariable += 2;\n"
-								# line_as_string = "\n"
+    							# line_as_string = "\n"
+    com aVariable int = 10; 	# line_as_string = "com aVariable int = 10;\n"
+    							# line_as_string = "\n"
+    aVariable += 2;				# line_as_string = "aVariable += 2;\n"
+    							# line_as_string = "\n"
 }								# line_as_string = "}\n"
 ```
 
 ```
 exported func main() {			# line_as_string = "exported func main() {\n"
 								# line_as_string = "\n"
-	com aVariable int = 10; 	# line_as_string = "com "
+    com aVariable int = 10; 	# line_as_string = "com "
 #      ^
 #      |
 #   Lexer is here.
