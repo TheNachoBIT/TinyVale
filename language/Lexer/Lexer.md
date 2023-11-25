@@ -303,7 +303,7 @@ void Lexer::Start() {
 ```
 
 The whole process goes like this:
-- First it sets the Position to "-1", so when you attempt to get the next token, it inmediately starts at index 0 and doesn't accidentally skip a letter at the beginning (*and don't cause UB*).
+- First it sets the Position to "-1", so when you attempt to get the next token, it inmediately starts at index 0 and doesn't accidentally skip a letter at the beginning (*and also doesn't cause UB*).
 - Then it sets the Line and Column to "1", in order to indicate that we're starting at the beginning of the line, in the first letter.
 - Finally it sets LastChar to a space. This isn't set as "0" because it could accidentally detect it as an end of a file or a string termination, so its best to have a token that doesn't terminate, but it is skippable.
 
