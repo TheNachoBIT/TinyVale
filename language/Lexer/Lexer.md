@@ -225,7 +225,7 @@ This count increases by one each time the Lexer sees a new line chatacter ('\n')
 ```
 exported func main() {      # This is the first line, so starts as "1"
                             # If the lexer is right here where this comment is. Line will be equals to "2".
-    com aVariable int = 10;	# Line = 3
+    com aVariable int = 10; # Line = 3
                             # Line = 4
     aVariable += 2;         # Line = 5
                             # And so on...
