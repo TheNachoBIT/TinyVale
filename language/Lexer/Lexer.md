@@ -444,7 +444,7 @@ LastChar = Advance();
 
 For safety purposes, in case our Content String ends up corrupted (or has UB), we have a simple but effective failsafe that checks if our character is less than 32.
 
-This is a way to check if it isn't accidentally a special character in the ASCII that indicates null termination or something weird.
+This is a way to check if it isn't accidentally a special character in the ASCII table that indicates null termination or something weird.
 
 If this happens for some reason, we tokenize it as the end of a file, to prevent further corruption.
 
