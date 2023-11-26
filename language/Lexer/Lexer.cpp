@@ -57,15 +57,15 @@ void Lexer::GetNextToken() {
 
 int Lexer::GetToken() {
 
-	while (isspace(LastChar)) LastChar = Advance();
+	while (isspace(LastChar)) { LastChar = Advance(); }
 
-	if (isalpha(LastChar) || LastChar == '@') return GetIdentifier();
+	if (isalpha(LastChar)) { return GetIdentifier(); }
 
-	if (isdigit(LastChar)) return GetNumber();
+	if (isdigit(LastChar)) { return GetNumber(); }
 
-	if(LastChar == '\'') return GetChar();
+	if(LastChar == '\'') { return GetChar(); }
 
-	if(LastChar == '\"') return GetString();
+	if(LastChar == '\"') { return GetString(); }
 
 	if (LastChar == '#')
 	{
@@ -89,7 +89,7 @@ int Lexer::GetToken() {
 	// it makes no sense to find characters that are below space in
 	// the ASCII table. Meaning that if we find one like that at this point,
 	// its undefined behavior.
-	if (ThisChar < 32) ThisChar = Token::EndOfFile;
+	if (ThisChar < 32) { ThisChar = Token::EndOfFile; }
 
 	return ThisChar;
 }

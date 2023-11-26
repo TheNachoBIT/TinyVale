@@ -349,3 +349,116 @@ And we finish the function by returning the current character:
 ```c++
 return Content[Position];
 ```
+
+### ```void Lexer::GetNextToken()```
+
+Pretty self-explanatory, but its one of the most important and most called functions by the Parser: It gets the next token.
+
+It uses the GetToken() function, and saves the result in CurrentToken.
+
+*Code (Lexer.cpp)*
+
+```c++
+void Lexer::GetNextToken() {
+
+	CurrentToken = GetToken();
+}
+```
+
+### ```int Lexer::GetToken()```
+
+This gets the token (again, pretty much self-explanatory lol), but the main diference is that this function acts like a "main hub" for tokenization, where the processes inside of it are splitted into other functions, like levels in a level selection screen. So, to explain this better, i'm going to talk about it like if it was a level selection screen.
+
+- Let's begin with the first level.
+
+  This is a loop that checks if our current character is a space (' '), if that's true, then keep "Advance()"-ing until you hit a character that isn't space.
+
+  ```c++
+  while (isspace(LastChar)) { LastChar = Advance(); }
+  ```
+
+- Then the second level, this is where the fun actually begins :D
+
+  Now that we have our character, let's check if its alphabetic (if its a, b, c, ... or z). If our character is alphabetic, then it is an identifier, so we execute the GetIdentifier() level.
+  
+  ```c++
+  if (isalpha(LastChar)) { return GetIdentifier(); }
+  ```
+
+- If its not a letter, let's jump to the third level.
+
+  Check if its a digit (0, 1, 2, ... or 9). If that's true, then run the GetNumber() level.
+  
+  ```c++
+  if (isdigit(LastChar)) { return GetNumber(); }
+  ```
+
+- If its not a number, let's jump to the fourth level.
+
+  If our character is an apostrophe ('), then that indicates you're trying to use a character (in the Vale code). If that's the case, then run the GetChar() level.
+
+  ```c++
+  if(LastChar == '\'') { return GetChar(); }
+  ```
+
+- If its not a Vale character, then let's jump to the fifth level.
+
+  Check if its a quotation mark ("). If that's true, that indicates that there's a string in the Vale code, so let's run the GetString() level.
+  
+  ```c++
+  if(LastChar == '\"') { return GetString(); }
+  ```
+
+- If its not a String, then let's go to the sixth level.
+
+  Check if its a comment. If that's true, keep skipping until you hit either a new line character (\n), Windows's new line character (\r) or the end of the file.
+  
+  ```c++
+  if (LastChar == '#')
+  {
+  	  // Comment until end of line.
+  	  do
+  	  {
+  	  	LastChar = Advance();
+  	  }
+  	  while (LastChar != EOF && LastChar != '\n' && LastChar != '\r');
+    
+  	  if (LastChar != EOF) return GetToken();
+  }
+  ```
+
+- If its not a comment, then let's go to the seventh and final level.
+
+  Check if its the end of the file. If true, then tokenize it.
+
+  ```c++
+  if (LastChar == EOF) return Token::EndOfFile;
+  ```
+
+Finally, we copy the LastChar into ThisChar, and Advance() LastChar to prepare it for the next time GetToken() is called. If you don't do this, its going to get stuck in a forever loop with the same character.
+
+```c++
+int ThisChar = LastChar;
+LastChar = Advance();
+```
+
+For safety purposes, in case our Content String ends up corrupted (or has UB), we have a simple but effective failsafe that checks if our character is less than 32.
+
+This is a way to check if it isn't accidentally a special character in the ASCII that indicates null termination or something weird.
+
+If this happens for some reason, we tokenize it as the end of a file, to prevent further corruption.
+
+```c++
+// This is a fail-safe in case memory corruption appears.
+// Since at this point, we're looking for normal characters,
+// it makes no sense to find characters that are below space in
+// the ASCII table. Meaning that if we find one like that at this point,
+// its undefined behavior.
+if (ThisChar < 32) { ThisChar = Token::EndOfFile; }
+```
+
+And finally, we return ThisChar, ready for use.
+
+```c++
+return ThisChar();
+```
