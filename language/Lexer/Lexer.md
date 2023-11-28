@@ -462,3 +462,125 @@ And finally, we return ThisChar, ready for use.
 ```c++
 return ThisChar();
 ```
+
+### ```bool Lexer::IsIdentifier(std::string s)```
+
+Checks if the current identifier is equals to string "s".
+
+This is used a lot in the GetIdentifier() function, which functionality will be explained later.
+
+*Code (Lexer.cpp)*
+
+```c++
+bool Lexer::IsIdentifier(std::string s) {
+
+	return IdentifierStr == s;
+}
+```
+
+### ```bool Lexer::IsStillIdentifier(char c)```
+
+Checks if the Lexer is still working with an identifier.
+
+Like IsIdentifier(), this is used in GetIdentifier() to see how far the Lexer can go before it hits a space or another character.
+
+*Code (Lexer.cpp)*
+
+```c++
+bool Lexer::IsStillIdentifier(char c) {
+
+	return isalnum(c) || c == '_';
+}
+```
+
+The condition that the function returns will be true if the character "c" is either alphanumeric (if its a letter or a number), or if its equals to '\_'.
+
+### ```int Lexer::GetChar()```
+
+Gets the character found by the Lexer in GetIdentifier().
+
+Its pretty straightforward, but you're going to notice that it converts it to a number. 
+
+#### "Why?" you may ask...
+
+The reason for that is because characters internally work as numbers (once it hits the CodeGen process). So, we can use this to our advantage to make the overall code more compact. Instead of having to code new functionality just for the characters, we can just convert them into numbers and have the same result with no extra cost.
+
+#### Let's take a look at what the function does:
+
+- First, since we're in the "'" character, we move forward one character in the code. And clears the "NumValString" variable to turn it into a new canvas for this process.
+
+```c++
+LastChar = Advance();
+NumValString = "";
+```
+
+- Once that's done, it checks if it contains a left-oriented backslash character '\'. If true, it runs StringSlash(), or continue if false.
+
+```c++
+if(LastChar == '\\') {
+		StringSlash();
+}
+```
+
+- Once we have the character, let's finally add it to NumValString, and once again move forward one character.
+
+```c++
+NumValString += std::to_string(LastChar);
+LastChar = Advance();
+```
+
+- Finally, we do a check if we a closing character "'", if true, we advance once more.
+
+```c++
+if(LastChar == '\'') { LastChar = Advance(); }
+```
+
+- And we close the function by tokenizing the char as a number.
+
+```c++
+return Token::Number;
+```
+
+### ```int Lexer::GetString()```
+
+Gets a String found by the Lexer in GetIdentifier().
+
+Like GetChar(), it tokenizes and grabs the string info.
+
+- First, it clears everything up.
+
+```c++
+StringString = "";
+LastChar = Advance();
+```
+
+- And then, it'll start a special loop where it'll keep advancing if the last character is:
+
+  - NOT A double quotation mark '"'.
+  - NOT The End of the File.
+  - NOT A character which value in the ASCII table is less than space (less than 32).
+
+  ```c++
+  do {
+
+		if(LastChar == '\\') {
+			StringSlash();
+		}
+
+		StringString += LastChar;
+		LastChar = Advance();
+		
+	} while(LastChar != '\"' && LastChar != Token::EndOfFile && LastChar >= 32);
+	```
+
+- Once the loop comes to an end, we do a little check just in case: If there's a double quotation mark, go forward once more.
+
+  ```c++
+  if(LastChar == '\"') { LastChar = Advance(); }
+  ```
+
+- And we finally end the function by returning the string token.
+  
+  ```c++
+  return Token::String;
+  ```

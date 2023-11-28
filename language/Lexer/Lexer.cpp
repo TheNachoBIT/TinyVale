@@ -110,8 +110,9 @@ int Lexer::GetChar() {
 
 	NumValString = "";
 
-	if(LastChar == '\\')
+	if(LastChar == '\\') {
 		StringSlash();
+	}
 
 	NumValString += std::to_string(LastChar);
 
@@ -127,13 +128,15 @@ int Lexer::GetString() {
 	StringString = "";
 	LastChar = Advance();
 
-	do
-	{
-		if(LastChar == '\\')
+	do {
+
+		if(LastChar == '\\') {
 			StringSlash();
+		}
 
 		StringString += LastChar;
 		LastChar = Advance();
+		
 	} while(LastChar != '\"' && LastChar != Token::EndOfFile && LastChar >= 32);
 
 	if(LastChar == '\"') { LastChar = Advance(); }
