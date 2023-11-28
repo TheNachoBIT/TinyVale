@@ -148,12 +148,12 @@ void Lexer::StringSlash() {
 
 	LastChar = Advance();
 
-	if(LastChar == 'n') LastChar = '\n';
-	else if(LastChar == 'r') LastChar = '\r';
-	else if(LastChar == 't') LastChar = '\t';
-	else if(LastChar == '0') LastChar = '\0';
-	else if(LastChar == '\"') LastChar = '\"';
-	else if(LastChar == '\\') LastChar = '\\';
+	if(LastChar == 'n') { LastChar = '\n'; }
+	else if(LastChar == 'r') { LastChar = '\r'; }
+	else if(LastChar == 't') { LastChar = '\t'; }
+	else if(LastChar == '0') { LastChar = '\0'; }
+	else if(LastChar == '\"') { LastChar = '\"'; }
+	else if(LastChar == '\\') { LastChar = '\\'; }
 }
 
 int Lexer::GetIdentifier() {

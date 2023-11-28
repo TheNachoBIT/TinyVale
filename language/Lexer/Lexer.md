@@ -497,7 +497,7 @@ The condition that the function returns will be true if the character "c" is eit
 
 ### ```int Lexer::GetChar()```
 
-Gets the character found by the Lexer in GetIdentifier().
+Gets the character found by the Lexer in GetToken().
 
 Its pretty straightforward, but you're going to notice that it converts it to a number. 
 
@@ -543,7 +543,7 @@ return Token::Number;
 
 ### ```int Lexer::GetString()```
 
-Gets a String found by the Lexer in GetIdentifier().
+Gets a String found by the Lexer in GetToken().
 
 Like GetChar(), it tokenizes and grabs the string info.
 
@@ -584,3 +584,23 @@ LastChar = Advance();
   ```c++
   return Token::String;
   ```
+
+### ```void Lexer::StringSlash()```
+
+This is a function that handles special characters that contain a left-oriented backslash "\", also known as Escape Sequences.
+
+In code, to add a new line, tab, and so on inside a string, we need Escape Sequences to interpret them, and this function takes care of that.
+
+Once it got the left-oriented backslash, it moves forward and checks for all of the available words. The entire list of them can be found in the Lexer.cpp code:
+
+```c++
+void Lexer::StringSlash() {
+
+	LastChar = Advance();
+
+	if(LastChar == 'n') { LastChar = '\n'; }
+	else if(LastChar == 'r') { LastChar = '\r'; }
+	// ...
+
+}
+```
