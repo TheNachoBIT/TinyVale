@@ -607,7 +607,7 @@ void Lexer::StringSlash() {
 
 ### ```static int GetIdentifier()```
 
-This is one of the most important functions used by GetToken(), it gets the identifier and most of the special identifiers (program, func, com, etc.).
+This is one of the most important functions used by [GetToken()](#static-int-GetToken), it gets the identifier and most of the special identifiers (program, func, com, etc.).
 
 - First it sets the last character as the first character of IdentifierStr.
 	
