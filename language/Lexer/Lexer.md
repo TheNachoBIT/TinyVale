@@ -4,9 +4,9 @@ The Lexer is the process that takes care of converting letters, numbers, words, 
 
 ## How does it work?
 
-Well, compared to other compilers, instead of gathering all of the tokens and once done, start the next step, the Lexer is designed to work alongside the Parser. The Parser fires up the Lexer by calling ```Lexer::Start()``` *(this can also be used to reset the Lexer, if needed)*, and it'll start at the beginning of your code. 
+Well, compared to other compilers, instead of gathering all of the tokens and once done, start the next step, the Lexer is designed to work alongside the Parser. The Parser fires up the Lexer by calling [Start()](#static-void-Start) *(this can also be used to reset the Lexer, if needed)*, and it'll start at the beginning of your code. 
 
-Once that's done, the Parser will start getting the next token with ```Lexer::GetNextToken()```. Once that's added, it'll check what kind it is, do what it has to do (which it'll be explained in the Parser section), and the process repeats until you hit the end of the line.
+Once that's done, the Parser will start getting the next token with [GetNextToken()](#static-void-GetNextToken). Once that's added, it'll check what kind it is, do what it has to do (which it'll be explained in the Parser section), and the process repeats until you hit the end of the line.
 
 So to recap, the Lexer is designed to be used as a toolkit by other processes (in this case, the only one using it is the Parser, so far), rather than being its own thing.
 
@@ -126,7 +126,7 @@ std::string getName = Lexer::IdentifierStr;
 
 ### ```static std::string NumValString```
 
-This acts like IdentifierStr, but for numbers instead.
+This acts like [IdentifierStr](#static-stdstring-IdentifierStr), but for numbers instead.
 
 Why this is a string instead of an integer or a float? Because it's easier to work with, specially when you get into hexadecimal territory. The Lexer can just grab any number type in form of a string, and later on in the Parser we can just convert it into whatever type we want or need. This is also more compact in terms of code size, because otherwise you could have to split all of the possible functionality for each and individual number types, one for ints, other one for floats, other for hex, etc.
 
@@ -163,7 +163,7 @@ myString str = "Hello!";
 #              This one
 ```
 
-Its functionality is the same as NumValString and IdentifierStr, with the same way of getting the info.
+Its functionality is the same as [NumValString](#static-stdstring-NumValString) and [IdentifierStr](#static-stdstring-IdentifierStr), with the same way of getting the info.
 
 ### ```static int CurrentToken```
 
@@ -187,7 +187,7 @@ exported func main()
 #       |
 ```
 
-Let's suppose that the Lexer is here. We're in the first line of our Vale Code. You just used "Lexer::GetNextToken()" in the Parser and the result from "Lexer::CurrentToken" is 'exported'. Because 'exported' has 8 characters, the Lexer is currently in position '8'.
+Let's suppose that the Lexer is here. We're in the first line of our Vale Code. You just used [GetNextToken()](#static-void-GetNextToken) in the Parser and the result from [CurrentToken](#static-int-CurrentToken) is 'exported'. Because 'exported' has 8 characters, the Lexer is currently in position '8'.
 
 ```
 exported func main()
@@ -195,7 +195,7 @@ exported func main()
 #            |
 ```
 
-Now let's do "Lexer::GetNextToken()" again. We found out that it's a 'func' keyword, all that jazz... Because it skips spaces, new lines, and characters that aren't really important, it goes forward 1 character and does nothing with it.
+Now let's do [GetNextToken()](#static-void-GetNextToken) again. We found out that it's a 'func' keyword, all that jazz... Because it skips spaces, new lines, and characters that aren't really important, it goes forward 1 character and does nothing with it.
 
 So, our last position we measured (8) + the space we skipped (1) + 'func' (4) = 13. So we're now in position '13'.
 
@@ -236,11 +236,11 @@ exported func main() {      # This is the first line, so starts as "1"
 
 Shows in what column the Lexer is located.
 
-This acts the same as Position, with the difference being that once the Lexer hits a new line, its count will be reseted back to "1".
+This acts the same as [Position](#static-int-Position), with the difference being that once the Lexer hits a new line, its count will be reseted back to "1".
 
 ### ```static std::string line_as_string```
 
-Contains the current line in form of a string. Characters will keep being added to this the further the Lexer goes. Once it reaches to the end of the line, it gets copied and pushed back to all_lines_vector and it clears itself out.
+Contains the current line in form of a string. Characters will keep being added to this the further the Lexer goes. Once it reaches to the end of the line, it gets copied and pushed back to [all_lines_vector](#static-stdvectorstdstring-all_lines_vector) and it clears itself out.
 
 ```
 exported func main() {          # line_as_string = "exported func main() {\n"
@@ -263,13 +263,13 @@ exported func main() {          # line_as_string = "exported func main() {\n"
 
 ### ```static std::vector<std::string> all_lines_vector```
 
-Contains all of the lines collected from the line_as_string process.
+Contains all of the lines collected from the [line_as_string](#static-stdstring-line_as_string) process.
 
 ### ```static LexerIsInside isInside```
 
-Checks where the Lexer currently is. How this variable works is already explained in the LexerIsInside enum's section.
+Checks where the Lexer currently is. How this variable works is already explained in the [LexerIsInside](#the-lexerisinside-enum) enum's section.
 
-### ```static int lastChar```
+### ```static int LastChar```
 
 Contains the last character obtained by the Lexer.
 
@@ -277,7 +277,7 @@ Contains the last character obtained by the Lexer.
 
 ### ```static void AddContent(std::string c)```
 
-Adds/Concatenates the string "c" to the "Content" string.
+Adds/Concatenates the string "c" to the [Content](#static-stdstring-Content) string.
 
 *Code (Lexer.cpp)*
 
@@ -303,9 +303,9 @@ void Lexer::Start() {
 ```
 
 The whole process goes like this:
-- First it sets the Position to "-1", so when you attempt to get the next token, it inmediately starts at index 0 and doesn't accidentally skip a letter at the beginning (*and also doesn't cause UB*).
-- Then it sets the Line and Column to "1", in order to indicate that we're starting at the beginning of the line, in the first letter.
-- Finally it sets LastChar to a space. This isn't set as "0" because it could accidentally detect it as an end of a file or a string termination, so its best to have a token that doesn't terminate, but it is skippable.
+- First it sets the [Position](#static-int-Position) to "-1", so when you attempt to get the next token, it inmediately starts at index 0 and doesn't accidentally skip a letter at the beginning (*and also doesn't cause UB*).
+- Then it sets the [Line](#static-int-Line) and [Column](#static-int-Column) to "1", in order to indicate that we're starting at the beginning of the line, in the first letter.
+- Finally it sets [LastChar](#static-int-LastChar) to a space. This isn't set as "0" because it could accidentally detect it as an end of a file or a string termination, so its best to have a token that doesn't terminate, but it is skippable.
 
 ### ```static int Advance()```
 
@@ -313,7 +313,7 @@ Moves the Lexer one character forward, while getting and/or setting all of the n
 
 [Full Code (Lexer.cpp)](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Lexer/Lexer.cpp#L32)
 
-First, it increments the count of both Position and Column respectively, and uses the Position as an index to get the character we have now and add it to the "line_as_string" (as shown in the line_as_string behavior).
+First, it increments the count of both [Position](#static-int-Position) and [Column](#static-int-Column) respectively, and uses the [Position](#static-int-Position) as an index to get the character we have now and add it to the [line_as_string](#static-stdstring-line_as_string) (as shown in the [line_as_string](#static-stdstring-line_as_string) behavior).
 
 ```c++
 Position += 1;
@@ -329,14 +329,14 @@ Once that's done, it checks if the current character is an end of line:
 if (Content[Position] == '\n') { //...
 ```
 
-And if that condition is true, we increment the Line count by "1", and reset the Column to "1", to tell the Lexer that we're in the beginning of a new line:
+And if that condition is true, we increment the [Line](#static-int-Line) count by "1", and reset the [Column](#static-int-Column) to "1", to tell the Lexer that we're in the beginning of a new line:
 
 ```c++
 Line += 1;
 Column = 1;
 ```
 
-Finally, we copy and push back the line_as_string to all_lines_vector and clear line_as_string, giving a close to the 'if' statement.
+Finally, we copy and push back the [line_as_string](#static-stdstring-line_as_string) to [all_lines_vector](#static-stdvectorstdstring-all_lines_vector) and clear [line_as_string](#static-stdstring-line_as_string), giving a close to the 'if' statement.
 
 ```c++
 all_lines_vector.push_back(line_as_string);
@@ -354,7 +354,7 @@ return Content[Position];
 
 Pretty self-explanatory, but its one of the most important and most called functions by the Parser: It gets the next token.
 
-It uses the GetToken() function, and saves the result in CurrentToken.
+It uses the [GetToken()](#static-int-GetToken) function, and saves the result in [CurrentToken](#static-int-CurrentToken).
 
 *Code (Lexer.cpp)*
 
@@ -371,7 +371,7 @@ This gets the token (again, pretty much self-explanatory lol), but the main dife
 
 - Let's begin with the first level.
 
-  This is a loop that checks if our current character is a space (' '), if that's true, then keep "Advance()"-ing until you hit a character that isn't space.
+  This is a loop that checks if our current character is a space (' '), if that's true, then keep [Advance()](#static-int-Advance)-ing until you hit a character that isn't space.
 
   ```c++
   while (isspace(LastChar)) { LastChar = Advance(); }
@@ -379,7 +379,7 @@ This gets the token (again, pretty much self-explanatory lol), but the main dife
 
 - Then the second level, this is where the fun actually begins :D
 
-  Now that we have our character, let's check if its alphabetic (if its a, b, c, ... or z). If our character is alphabetic, then it is an identifier, so we execute the GetIdentifier() level.
+  Now that we have our character, let's check if its alphabetic (if its a, b, c, ... or z). If our character is alphabetic, then it is an identifier, so we execute the [GetIdentifier()](#static-int-GetIdentifier) level.
   
   ```c++
   if (isalpha(LastChar)) { return GetIdentifier(); }
@@ -387,7 +387,7 @@ This gets the token (again, pretty much self-explanatory lol), but the main dife
 
 - If its not a letter, let's jump to the third level.
 
-  Check if its a digit (0, 1, 2, ... or 9). If that's true, then run the GetNumber() level.
+  Check if its a digit (0, 1, 2, ... or 9). If that's true, then run the [GetNumber()](#static-int-GetNumber) level.
   
   ```c++
   if (isdigit(LastChar)) { return GetNumber(); }
@@ -395,7 +395,7 @@ This gets the token (again, pretty much self-explanatory lol), but the main dife
 
 - If its not a number, let's jump to the fourth level.
 
-  If our character is an apostrophe ('), then that indicates you're trying to use a character (in the Vale code). If that's the case, then run the GetChar() level.
+  If our character is an apostrophe ('), then that indicates you're trying to use a character (in the Vale code). If that's the case, then run the [GetChar()](#static-int-GetChar) level.
 
   ```c++
   if(LastChar == '\'') { return GetChar(); }
@@ -403,7 +403,7 @@ This gets the token (again, pretty much self-explanatory lol), but the main dife
 
 - If its not a Vale character, then let's jump to the fifth level.
 
-  Check if its a quotation mark ("). If that's true, that indicates that there's a string in the Vale code, so let's run the GetString() level.
+  Check if its a quotation mark ("). If that's true, that indicates that there's a string in the Vale code, so let's run the [GetString()](#static-int-GetString) level.
   
   ```c++
   if(LastChar == '\"') { return GetString(); }
@@ -435,14 +435,14 @@ This gets the token (again, pretty much self-explanatory lol), but the main dife
   if (LastChar == EOF) return Token::EndOfFile;
   ```
 
-Finally, we copy the LastChar into ThisChar, and Advance() LastChar to prepare it for the next time GetToken() is called. If you don't do this, its going to get stuck in a forever loop with the same character.
+Finally, we copy the [LastChar](#static-int-LastChar) into ThisChar, and [Advance()](#static-int-Advance) [LastChar](#static-int-LastChar) to prepare it for the next time [GetToken()](#static-int-GetToken) is called. If you don't do this, its going to get stuck in a forever loop with the same character.
 
 ```c++
 int ThisChar = LastChar;
 LastChar = Advance();
 ```
 
-For safety purposes, in case our Content String ends up corrupted (or has UB), we have a simple but effective failsafe that checks if our character is less than 32.
+For safety purposes, in case our [Content](#static-stdstring-Content) String ends up corrupted (or has UB), we have a simple but effective failsafe that checks if our character is less than 32.
 
 This is a way to check if it isn't accidentally a special character in the ASCII table that indicates null termination or something weird.
 
@@ -460,14 +460,14 @@ if (ThisChar < 32) { ThisChar = Token::EndOfFile; }
 And finally, we return ThisChar, ready for use.
 
 ```c++
-return ThisChar();
+return ThisChar;
 ```
 
 ### ```static bool IsIdentifier(std::string s)```
 
 Checks if the current identifier is equals to string "s".
 
-This is used a lot in the GetIdentifier() function, which functionality will be explained later.
+This is used a lot in the [GetIdentifier()](#static-int-GetIdentifier) function, which functionality will be explained later.
 
 *Code (Lexer.cpp)*
 
@@ -482,7 +482,7 @@ bool Lexer::IsIdentifier(std::string s) {
 
 Checks if the Lexer is still working with an identifier.
 
-Like IsIdentifier(), this is used in GetIdentifier() to see how far the Lexer can go before it hits a space or another character.
+Like [IsIdentifier()](#static-bool-IsIdentifierstdstring-s), this is used in [GetIdentifier()](#static-int-GetIdentifier) to see how far the Lexer can go before it hits a space or another character.
 
 *Code (Lexer.cpp)*
 
@@ -497,7 +497,7 @@ The condition that the function returns will be true if the character "c" is eit
 
 ### ```static int GetChar()```
 
-Gets the character found by the Lexer in GetToken().
+Gets the character found by the Lexer in [GetToken()](#static-int-GetToken).
 
 Its pretty straightforward, but you're going to notice that it converts it to a number. 
 
@@ -507,14 +507,14 @@ The reason for that is because characters internally work as numbers (once it hi
 
 #### Let's take a look at what the function does:
 
-- First, since we're in the "'" character, we move forward one character in the code. And clears the "NumValString" variable to turn it into a new canvas for this process.
+- First, since we're in the "'" character, we move forward one character in the code. And clears the [NumValString](#static-stdstring-NumValString) variable to turn it into a new canvas for this process.
 
 ```c++
 LastChar = Advance();
 NumValString = "";
 ```
 
-- Once that's done, it checks if it contains a left-oriented backslash character '\'. If true, it runs StringSlash(), or continue if false.
+- Once that's done, it checks if it contains a left-oriented backslash character '\'. If true, it runs [StringSlash()](#static-void-StringSlash), or continue if false.
 
 ```c++
 if(LastChar == '\\') {
@@ -522,14 +522,14 @@ if(LastChar == '\\') {
 }
 ```
 
-- Once we have the character, let's finally add it to NumValString, and once again move forward one character.
+- Once we have the character, let's finally add it to [NumValString](#static-stdstring-NumValString), and once again move forward one character.
 
 ```c++
 NumValString += std::to_string(LastChar);
 LastChar = Advance();
 ```
 
-- Finally, we do a check if we a closing character "'", if true, we advance once more.
+- Finally, we do a check if we a closing character "'", if true, we [Advance()](#static-int-Advance) once more.
 
 ```c++
 if(LastChar == '\'') { LastChar = Advance(); }
@@ -543,9 +543,9 @@ return Token::Number;
 
 ### ```static int GetString()```
 
-Gets a String found by the Lexer in GetToken().
+Gets a String found by the Lexer in [GetToken()](#static-int-GetToken).
 
-Like GetChar(), it tokenizes and grabs the string info.
+Like [GetChar()](#static-int-GetChar), it tokenizes and grabs the string info.
 
 - First, it clears everything up.
 
@@ -609,7 +609,7 @@ void Lexer::StringSlash() {
 
 This is one of the most important functions used by [GetToken()](#static-int-GetToken), it gets the identifier and most of the special identifiers (program, func, com, etc.).
 
-- First it sets the last character as the first character of IdentifierStr.
+- First it sets the last character as the first character of [IdentifierStr](#static-stdstring-IdentifierStr).
 	
   ```c++
   IdentifierStr = LastChar;
@@ -641,7 +641,7 @@ This is one of the most important functions used by [GetToken()](#static-int-Get
 
 	You can find the entire list of special identifiers in Lexer.cpp.
 
-- If IdentifierStr does not meet with all of the conditions, we just return the Identifier token. Meaning it could've be just the name of a variable or a special identifier that doesn't need to be tokenized (a type, for example).
+- If [IdentifierStr](#static-stdstring-IdentifierStr) does not meet with all of the conditions, we just return the Identifier token. Meaning it could've be just the name of a variable or a special identifier that doesn't need to be tokenized (a type, for example).
   
   ```c++
   return Token::Identifier;
@@ -666,7 +666,7 @@ Gets and tokenizes a number catched by the Lexer.
 	} while (isdigit(LastChar) || LastChar == '.' || LastChar == 'f' || LastChar == '_');
 	```
 
-- Then, we apply what we did to NumValString and return the Number Token.
+- Then, we apply what we did to [NumValString](#static-stdstring-NumValString) and return the Number Token.
   
   ```c++
   NumValString = NumStr;
