@@ -160,46 +160,46 @@ int Lexer::GetIdentifier() {
 
 	IdentifierStr = LastChar;
 
-	while (IsStillIdentifier((LastChar = Advance())))
-	{
+	while (IsStillIdentifier((LastChar = Advance()))) {
+
 		IdentifierStr += LastChar;
 	}
 
-	if (IsIdentifier("program")) return Token::Program;
+	if (IsIdentifier("program")) { return Token::Program; }
 
-	else if(IsIdentifier("com")) return Token::Com;
+	else if(IsIdentifier("com")) { return Token::Com; }
 
-	else if(IsIdentifier("llreturn")) return Token::LLReturn;
+	else if(IsIdentifier("llreturn")) { return Token::LLReturn; }
 
-	else if(IsIdentifier("add")) return Token::Add;
-	else if(IsIdentifier("sub")) return Token::Sub;
+	else if(IsIdentifier("add")) { return Token::Add; }
+	else if(IsIdentifier("sub")) { return Token::Sub; }
 
-	else if(IsIdentifier("and")) return Token::And;
-	else if(IsIdentifier("or")) return Token::Or;
-	else if(IsIdentifier("xor")) return Token::Xor;
+	else if(IsIdentifier("and")) { return Token::And; }
+	else if(IsIdentifier("or")) { return Token::Or; }
+	else if(IsIdentifier("xor")) { return Token::Xor; }
 
-	else if(IsIdentifier("COMPARE")) return Token::Compare;
+	else if(IsIdentifier("COMPARE")) { return Token::Compare; }
 
-	else if(IsIdentifier("if")) return Token::If;
-	else if(IsIdentifier("else")) return Token::Else;
+	else if(IsIdentifier("if")) { return Token::If; }
+	else if(IsIdentifier("else")) { return Token::Else; }
 
-	else if(IsIdentifier("return")) return Token::Return;
+	else if(IsIdentifier("return")) { return Token::Return; }
 
-	else if(IsIdentifier("func") || IsIdentifier("funky")) return Token::Procedure;
+	else if(IsIdentifier("func") || IsIdentifier("funky")) { return Token::Procedure; }
 
-	else if(IsIdentifier("comstore")) return Token::ComStore;
+	else if(IsIdentifier("comstore")) { return Token::ComStore; }
 
-	else if(IsIdentifier("mem")) return Token::Mem;
-	else if(IsIdentifier("loadmem")) return Token::LoadMem;
-	else if(IsIdentifier("memstore")) return Token::MemStore;
+	else if(IsIdentifier("mem")) { return Token::Mem; }
+	else if(IsIdentifier("loadmem")) { return Token::LoadMem; }
+	else if(IsIdentifier("memstore")) { return Token::MemStore; }
 
-	else if(IsIdentifier("intcast")) return Token::IntCast;
-	else if(IsIdentifier("to")) return Token::To;
+	else if(IsIdentifier("intcast")) { return Token::IntCast; }
+	else if(IsIdentifier("to")) { return Token::To; }
 
-	else if(IsIdentifier("block")) return Token::Block;
-	else if(IsIdentifier("goto")) return Token::Goto;
+	else if(IsIdentifier("block")) { return Token::Block; }
+	else if(IsIdentifier("goto")) { return Token::Goto; }
 
-	else if(IsIdentifier("exported")) return Token::Exported;
+	else if(IsIdentifier("exported")) { return Token::Exported; }
 
 	return Token::Identifier;
 }
@@ -210,7 +210,8 @@ int Lexer::GetNumber() {
 
 	do
 	{
-		if(LastChar != '_') NumStr += LastChar;
+		if(LastChar != '_') { NumStr += LastChar; }
+		
 		LastChar = Advance();
 	} while (isdigit(LastChar) || LastChar == '.' || LastChar == 'f' || LastChar == '_');
 

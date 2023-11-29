@@ -350,7 +350,7 @@ And we finish the function by returning the current character:
 return Content[Position];
 ```
 
-### ```void Lexer::GetNextToken()```
+### ```static void GetNextToken()```
 
 Pretty self-explanatory, but its one of the most important and most called functions by the Parser: It gets the next token.
 
@@ -365,7 +365,7 @@ void Lexer::GetNextToken() {
 }
 ```
 
-### ```int Lexer::GetToken()```
+### ```static int GetToken()```
 
 This gets the token (again, pretty much self-explanatory lol), but the main diference is that this function acts like a "main hub" for tokenization, where the processes inside of it are splitted into other functions, like levels in a level selection screen. So, to explain this better, i'm going to talk about it like if it was a level selection screen.
 
@@ -463,7 +463,7 @@ And finally, we return ThisChar, ready for use.
 return ThisChar();
 ```
 
-### ```bool Lexer::IsIdentifier(std::string s)```
+### ```static bool IsIdentifier(std::string s)```
 
 Checks if the current identifier is equals to string "s".
 
@@ -478,7 +478,7 @@ bool Lexer::IsIdentifier(std::string s) {
 }
 ```
 
-### ```bool Lexer::IsStillIdentifier(char c)```
+### ```static bool IsStillIdentifier(char c)```
 
 Checks if the Lexer is still working with an identifier.
 
@@ -495,7 +495,7 @@ bool Lexer::IsStillIdentifier(char c) {
 
 The condition that the function returns will be true if the character "c" is either alphanumeric (if its a letter or a number), or if its equals to '\_'.
 
-### ```int Lexer::GetChar()```
+### ```static int GetChar()```
 
 Gets the character found by the Lexer in GetToken().
 
@@ -541,7 +541,7 @@ if(LastChar == '\'') { LastChar = Advance(); }
 return Token::Number;
 ```
 
-### ```int Lexer::GetString()```
+### ```static int GetString()```
 
 Gets a String found by the Lexer in GetToken().
 
@@ -585,11 +585,11 @@ LastChar = Advance();
   return Token::String;
   ```
 
-### ```void Lexer::StringSlash()```
+### ```static void StringSlash()```
 
 This is a function that handles special characters that contain a left-oriented backslash "\", also known as Escape Sequences.
 
-In code, to add a new line, tab, and so on inside a string, we need Escape Sequences to interpret them, and this function takes care of that.
+In code, to add a new line, tab, and so on inside a string in our .vale file, we need Escape Sequences to interpret them, and this function takes care of that.
 
 Once it got the left-oriented backslash, it moves forward and checks for all of the available words. The entire list of them can be found in the Lexer.cpp code:
 
@@ -604,3 +604,71 @@ void Lexer::StringSlash() {
 
 }
 ```
+
+### ```static int GetIdentifier()```
+
+This is one of the most important functions used by GetToken(), it gets the identifier and most of the special identifiers (program, func, com, etc.).
+
+- First it sets the last character as the first character of IdentifierStr.
+	
+  ```c++
+  IdentifierStr = LastChar;
+  ```
+
+- Then, it'll execute a loop that'll keep grabbing all of the characters until it hits a skippable character.
+  
+  ```c++
+  while (IsStillIdentifier((LastChar = Advance()))) {
+		
+		IdentifierStr += LastChar;
+	}
+	```
+
+- Once IdentifierStr is complete, it'll go through a list of special identifiers to check if it is equals to a specific word.
+
+  ```c++
+  if (IsIdentifier("program")) { return Token::Program; }
+
+	else if(IsIdentifier("com")) { return Token::Com; }
+
+	else if(IsIdentifier("llreturn")) { return Token::LLReturn; }
+
+	else if(IsIdentifier("add")) { return Token::Add; }
+	else if(IsIdentifier("sub")) { return Token::Sub; }
+
+	// And the checklist goes on ...
+	```
+
+	You can find the entire list of special identifiers in Lexer.cpp.
+
+- If IdentifierStr does not meet with all of the conditions, we just return the Identifier token. Meaning it could've be just the name of a variable or a special identifier that doesn't need to be tokenized (a type, for example).
+  
+  ```c++
+  return Token::Identifier;
+  ```
+
+### ```static int GetNumber()```
+
+Gets and tokenizes a number catched by the Lexer.
+
+- It keeps going, and adds the character except if it is a '\_', which in this case it acts as a skippable token.
+
+  The '\_' is just syntatic sugar, to make it easier to separate big numbers, if needed. (You can type 10 billion like this: 10_000_000_000).
+  
+  ```c++
+  std::string NumStr;
+
+	do
+	{
+		if(LastChar != '_') { NumStr += LastChar; }
+		
+		LastChar = Advance();
+	} while (isdigit(LastChar) || LastChar == '.' || LastChar == 'f' || LastChar == '_');
+	```
+
+- Then, we apply what we did to NumValString and return the Number Token.
+  
+  ```c++
+  NumValString = NumStr;
+	return Token::Number;
+	```
