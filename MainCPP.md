@@ -50,7 +50,7 @@ If one of them is true, then we:
   CodeGen::Initialize();
   ```
 
-- Start the [Lexer](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Lexer/Lexer.md), by first Adding "str" to the Lexer's Content with [Lexer::AddContent()](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Lexer/Lexer.md#static-void-AddContent-stdstring-c), and then executing [Lexer::Start()](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Lexer/Lexer.md#static-void-Start).
+- Start the [Lexer](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Lexer/Lexer.md), by first Adding "str" to the Lexer's Content with [Lexer::AddContent()](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Lexer/Lexer.md#static-void-AddContentstdstring-c), and then executing [Lexer::Start()](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Lexer/Lexer.md#static-void-Start).
 
   ```c++
   Lexer::AddContent(str);
