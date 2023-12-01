@@ -6,7 +6,7 @@ At the same time, i'm going to be documenting each step of this compiler to make
 
 ## Documentation
 
-- [Entry Point (main.cpp)](https://github.com/TheNachoBIT/TinyVale/blob/main/MainCPP.md) (Not available yet)
+- [Entry Point (main.cpp)](https://github.com/TheNachoBIT/TinyVale/blob/main/MainCPP.md)
 - [The Lexer](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Lexer/Lexer.md)
 - [The Parser](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Parser/Parser.md) (Not available yet)
 - [The AST & AST CodeGen](https://github.com/TheNachoBIT/TinyVale/blob/main/language/AST/AST.md) (Not available yet)
