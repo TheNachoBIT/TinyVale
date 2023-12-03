@@ -31,10 +31,6 @@ struct Parser {
 
 	static AST::Attributes currentAttributes;
 
-	static std::unique_ptr<AST::Expression> lastCompareOne;
-	static std::unique_ptr<AST::Expression> lastCompareTwo;
-	static int lastCmpType;
-
 	static std::vector<std::string> allBlockNames;
 
 	static void AddParserCom(std::string name, AST::Type* t) {
@@ -561,10 +557,6 @@ struct Parser {
 		Lexer::GetNextToken();
 
 		int finalCompare = TextToCompareType(compareType);
-
-		lastCompareOne = CompareOne->Clone();
-		lastCompareTwo = CompareTwo->Clone();
-		lastCmpType = finalCompare;
 
 		return std::make_unique<AST::Compare>(MemTreatment(std::move(CompareOne)), MemTreatment(std::move(CompareTwo)), finalCompare);
 	}
@@ -1194,6 +1186,9 @@ struct Parser {
 			Lexer::GetNextToken();
 
 			if (Lexer::CurrentToken == Token::EndOfFile) { break; }
+			
+			if (Lexer::CurrentToken == Token::Program) { allPrograms.push_back(std::move(HandleProgram())); }
+			if (Lexer::CurrentToken == Token::Procedure) { HandleProcedure(); }
 
 			if (Lexer::CurrentToken == Token::Exported) {
 				Lexer::GetNextToken();
@@ -1205,9 +1200,6 @@ struct Parser {
 					ExprError("Other 'exported' types aren't currently supported yet.");
 				}
 			}
-
-			if (Lexer::CurrentToken == Token::Program) { allPrograms.push_back(std::move(HandleProgram())); }
-			if (Lexer::CurrentToken == Token::Procedure) { HandleProcedure(); }
 		}
 
 		//std::cout << "CodeGen...\n";

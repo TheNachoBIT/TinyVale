@@ -12,8 +12,4 @@ std::string Parser::current_procedure_name;
 
 AST::Attributes Parser::currentAttributes;
 
-std::unique_ptr<AST::Expression> Parser::lastCompareOne;
-std::unique_ptr<AST::Expression> Parser::lastCompareTwo;
-int Parser::lastCmpType;
-
 std::vector<std::string> Parser::allBlockNames;
