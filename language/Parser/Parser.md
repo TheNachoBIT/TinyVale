@@ -4,7 +4,7 @@ The Parser is a crucial step in the compilation process, mostly because it takes
 
 ## By being an important step, you'll see that it is really BIG (code-wise)...
 
-But don't worry, the base is pretty small. It all starts in [MainLoop()](#static-void-MainLoopbool-build-false).
+But don't worry, the base is pretty small. It all starts in [MainLoop()](#static-void-MainLoopbool-build--false).
 
 ### ```static void MainLoop(bool build = false)```
 
