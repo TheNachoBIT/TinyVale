@@ -57,7 +57,7 @@ If one of them is true, then we:
   Lexer::Start();
   ```
 
-- And then finally we check if it can build, by checking if ```cmd == "build"```, and Run the Parser with Parser::MainLoop(), pushing the build check into it.
+- And then finally we check if it can build, by checking if ```cmd == "build"```, and Run the [Parser](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Parser/Parser.md) with [Parser::MainLoop()](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Parser/Parser.md#static-void-mainloopbool-build--false), pushing the build check into it.
 
   ```c++
   bool canBuild = cmd == "build";
