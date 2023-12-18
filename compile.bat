@@ -12,7 +12,7 @@ set LLVMConfigResult=
 for /f "delims=" %%x in (llvmconfig.txt) do set LLVMConfigResult=!LLVMConfigResult! %%x
 
 echo Compiling Tiny Vale on Windows...
-%ClangPath% -g -O3 language/Lexer/*.cpp language/Parser/*.cpp language/CodeGen/*.cpp language/BorrowChecker/*.cpp language/AST/*.cpp *.cpp %LLVMConfigResult% -fstack-protector -lssp -frtti -std=c++20 -static -o tinyvale
+%ClangPath% -g -O3 language/Lexer/*.cpp language/Parser/*.cpp language/CodeGen/*.cpp language/OwnershipManager/*.cpp language/AST/*.cpp *.cpp %LLVMConfigResult% -fstack-protector -lssp -frtti -std=c++20 -static -o tinyvale
 
 IF "%ERRORLEVEL%"=="0" (
     echo Tiny Vale Compiled Successfully

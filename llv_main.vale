@@ -1,18 +1,8 @@
 program main() {
-	com myValue i32 = 6;
-	add myValue, 2;
-	add myValue, 4;
-	add myValue, 8;
-	block LoopdiLoop {
-		
-		add myValue, 1;
-		
-		if COMPARE.IsLessThan(myValue, 100) {
-			
-			goto LoopdiLoop;
-		};
-
-	};
-
-	llreturn myValue;
+	com a i32 = 1;
+	com b i32 = 2;
+	com c i32 = 3;
+	comstore a, b;
+	comstore c, b;
+	llreturn c;
 }
