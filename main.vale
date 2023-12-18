@@ -4,8 +4,8 @@ exported funky main() {
 	com b int = 2;
 	com c int = 3;
 
-	a = b;
-	c = b;
+	a += c;
+	b += c;
 
 	return c;
 }

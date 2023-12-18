@@ -432,12 +432,6 @@ struct Parser {
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
 
-		if(OwnershipManager::IsBorrowed(value->name)) {
-			ExprError(std::string(value->name) + " already borrowed!");
-		}
-
-		OwnershipManager::MoveVariable(value->name);
-
 		return std::make_unique<AST::Add>(UnverifyMem(std::move(target)), MemTreatment(std::move(value)));
 	}
 
@@ -454,12 +448,6 @@ struct Parser {
 		Lexer::GetNextToken();
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
-
-		if(OwnershipManager::IsBorrowed(value->name)) {
-			ExprError(std::string(value->name) + " already borrowed!");
-		}
-
-		OwnershipManager::MoveVariable(value->name);
 
 		return std::make_unique<AST::Sub>(UnverifyMem(std::move(target)), MemTreatment(std::move(value)));
 	}
@@ -478,12 +466,6 @@ struct Parser {
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
 
-		if(OwnershipManager::IsBorrowed(value->name)) {
-			ExprError(std::string(value->name) + " already borrowed!");
-		}
-
-		OwnershipManager::MoveVariable(value->name);
-
 		return std::make_unique<AST::And>(UnverifyMem(std::move(target)), MemTreatment(std::move(value)));
 	}
 
@@ -501,12 +483,6 @@ struct Parser {
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
 
-		if(OwnershipManager::IsBorrowed(value->name)) {
-			ExprError(std::string(value->name) + " already borrowed!");
-		}
-
-		OwnershipManager::MoveVariable(value->name);
-
 		return std::make_unique<AST::Or>(UnverifyMem(std::move(target)), MemTreatment(std::move(value)));
 	}
 
@@ -523,12 +499,6 @@ struct Parser {
 		Lexer::GetNextToken();
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
-
-		if(OwnershipManager::IsBorrowed(value->name)) {
-			ExprError(std::string(value->name) + " already borrowed!");
-		}
-
-		OwnershipManager::MoveVariable(value->name);
 
 		return std::make_unique<AST::Xor>(UnverifyMem(std::move(target)), MemTreatment(std::move(value)));
 	}
@@ -951,12 +921,6 @@ struct Parser {
 
 		auto R = ParseExpression();
 
-		if(OwnershipManager::IsBorrowed(R->name)) {
-			ExprError(std::string(R->name) + " already borrowed!");
-		}
-
-		OwnershipManager::MoveVariable(R->name);
-
 		return std::make_unique<AST::Add>(UnverifyMem(std::move(L)), MemTreatment(std::move(R)));
 	}
 
@@ -971,10 +935,6 @@ struct Parser {
 		Lexer::GetNextToken();
 
 		auto R = ParseExpression();
-
-		if(OwnershipManager::IsBorrowed(R->name)) {
-			ExprError(std::string(R->name) + " already borrowed!");
-		}
 
 		OwnershipManager::MoveVariable(R->name);
 
