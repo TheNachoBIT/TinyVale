@@ -4,7 +4,11 @@ An attempt to make [**Vale's Compiler**](https://github.com/ValeLang/Vale) more 
 
 At the same time, i'm going to be documenting each step of this compiler to make sure everyone understands the internals of it, and hopefully it'll be easier for people to contribute.
 
-## Documentation
+## Toying with TinyVale (For Beginners)
+
+- [Chapter 0: Toying With TinyVale](https://github.com/TheNachoBIT/TinyVale/blob/tutorial/0-Toying-With-TinyVale.md) (Coming Soon)
+
+## Infrastructure Documentation
 
 - [Entry Point (main.cpp)](https://github.com/TheNachoBIT/TinyVale/blob/main/MainCPP.md)
 - [The Lexer](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Lexer/Lexer.md)

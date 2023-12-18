@@ -1,6 +1,6 @@
 # The Parser
 
-The Parser is a crucial step in the compilation process, mostly because it takes care of tokenizing (by using The Lexer as a tool), and making an Abstract Syntax Tree (AST) with those tokens.
+The Parser is a crucial step in the compilation process. Its job is to run the [Lexer](https://github.com/TheNachoBIT/TinyVale/blob/main/language/Lexer/Lexer.md) to tokenize, and it uses that information to convert your code into Objects that have other Objects inside of it, converting it all into a Tree: an Abstract Syntax Tree (AST).
 
 ## By being an important step, you'll see that it is really BIG (code-wise)...
 
@@ -22,7 +22,7 @@ This is a check to prevent main_target from being modified by accident via SetMa
 
 ### ```static std::string current_procedure_name;```
 
-Contains the current name of the Function the Parser is currently in. Internally this is called a Procedure due to Mascal Programming Language's Architechture being ported to this.
+Contains the current name of the Function the Parser is currently in. Internally this is called a Procedure due to Mascal Programming Language's Architechture being ported to TinyVale, so this naming will probably change in the future.
 
 ### ```static std::vector<std::unique_ptr<AST::Procedure>> all_procedures;```
 
@@ -60,6 +60,6 @@ StartMainTargetSystem();
 std::vector<std::unique_ptr<AST::Program>> allPrograms;
 ```
 
-Once all of this is set up, we start with the Parsing loop that'll 
+Once all of this is set up, we start with the Parsing loop that'll...
 
 *-- WIP --*
