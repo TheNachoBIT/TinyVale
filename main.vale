@@ -1,17 +1,11 @@
 exported funky main() {
 	
-	com myValue int = 6;
+	com a int = 1;
+	com b int = 2;
+	com c int = 3;
 
-	myValue += 2;
-	myValue += 4;
-	myValue += 8;
+	a = b;
+	c = b;
 
-	block LoopdiLoop {
-
-		myValue += 1;
-
-		if COMPARE.IsLessThan(myValue, 100) { goto LoopdiLoop; };
-	};
-
-	return myValue;
+	return c;
 }

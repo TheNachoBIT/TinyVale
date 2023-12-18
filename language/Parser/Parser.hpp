@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include "../Lexer/Lexer.hpp"
 #include "../AST/AST.hpp"
+#include "../BorrowChecker/BorrowChecker.hpp"
 //#include "../utils/DeleteGCCMainCall.hpp"
 
 struct Parser_Mem {
@@ -345,6 +346,8 @@ struct Parser {
 
 		std::unique_ptr<AST::Expression> expr;
 
+		BorrowChecker::CreateVariable(idName);
+
 		if(Lexer::CurrentToken == '=') {
 
 			Lexer::GetNextToken();
@@ -374,6 +377,8 @@ struct Parser {
 		Lexer::GetNextToken();
 
 		std::unique_ptr<AST::Expression> expr;
+
+		BorrowChecker::CreateVariable(idName);
 
 		if(Lexer::CurrentToken == '=') {
 
@@ -427,6 +432,12 @@ struct Parser {
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
 
+		if(BorrowChecker::IsBorrowed(value->name)) {
+			ExprError(std::string(value->name) + " already borrowed!");
+		}
+
+		BorrowChecker::MoveVariable(value->name);
+
 		return std::make_unique<AST::Add>(UnverifyMem(std::move(target)), MemTreatment(std::move(value)));
 	}
 
@@ -443,6 +454,12 @@ struct Parser {
 		Lexer::GetNextToken();
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
+
+		if(BorrowChecker::IsBorrowed(value->name)) {
+			ExprError(std::string(value->name) + " already borrowed!");
+		}
+
+		BorrowChecker::MoveVariable(value->name);
 
 		return std::make_unique<AST::Sub>(UnverifyMem(std::move(target)), MemTreatment(std::move(value)));
 	}
@@ -461,6 +478,12 @@ struct Parser {
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
 
+		if(BorrowChecker::IsBorrowed(value->name)) {
+			ExprError(std::string(value->name) + " already borrowed!");
+		}
+
+		BorrowChecker::MoveVariable(value->name);
+
 		return std::make_unique<AST::And>(UnverifyMem(std::move(target)), MemTreatment(std::move(value)));
 	}
 
@@ -478,6 +501,12 @@ struct Parser {
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
 
+		if(BorrowChecker::IsBorrowed(value->name)) {
+			ExprError(std::string(value->name) + " already borrowed!");
+		}
+
+		BorrowChecker::MoveVariable(value->name);
+
 		return std::make_unique<AST::Or>(UnverifyMem(std::move(target)), MemTreatment(std::move(value)));
 	}
 
@@ -494,6 +523,12 @@ struct Parser {
 		Lexer::GetNextToken();
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
+
+		if(BorrowChecker::IsBorrowed(value->name)) {
+			ExprError(std::string(value->name) + " already borrowed!");
+		}
+
+		BorrowChecker::MoveVariable(value->name);
 
 		return std::make_unique<AST::Xor>(UnverifyMem(std::move(target)), MemTreatment(std::move(value)));
 	}
@@ -644,6 +679,12 @@ struct Parser {
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
 
+		if(BorrowChecker::IsBorrowed(value->name)) {
+			ExprError(std::string(value->name) + " already borrowed!");
+		}
+
+		BorrowChecker::MoveVariable(value->name);
+
 		value = MemTreatment(std::move(value));
 
 		return std::make_unique<AST::ComStore>(std::move(target), std::move(value));
@@ -662,6 +703,12 @@ struct Parser {
 		Lexer::GetNextToken();
 
 		std::unique_ptr<AST::Expression> value = ParseExpression();
+
+		if(BorrowChecker::IsBorrowed(value->name)) {
+			ExprError(std::string(value->name) + " already borrowed!");
+		}
+
+		BorrowChecker::MoveVariable(value->name);
 
 		return std::make_unique<AST::MemStore>(Mem_Verify(std::move(target)), MemTreatment(std::move(value)));
 	}
@@ -904,6 +951,12 @@ struct Parser {
 
 		auto R = ParseExpression();
 
+		if(BorrowChecker::IsBorrowed(R->name)) {
+			ExprError(std::string(R->name) + " already borrowed!");
+		}
+
+		BorrowChecker::MoveVariable(R->name);
+
 		return std::make_unique<AST::Add>(UnverifyMem(std::move(L)), MemTreatment(std::move(R)));
 	}
 
@@ -919,6 +972,12 @@ struct Parser {
 
 		auto R = ParseExpression();
 
+		if(BorrowChecker::IsBorrowed(R->name)) {
+			ExprError(std::string(R->name) + " already borrowed!");
+		}
+
+		BorrowChecker::MoveVariable(R->name);
+
 		return std::make_unique<AST::Sub>(UnverifyMem(std::move(L)), MemTreatment(std::move(R)));
 	}
 
@@ -930,12 +989,24 @@ struct Parser {
 
 			auto R = ParseExpression();
 
+			if(BorrowChecker::IsBorrowed(R->name)) {
+				ExprError(std::string(R->name) + " already borrowed!");
+			}
+
+			BorrowChecker::MoveVariable(R->name);
+
 			return std::make_unique<AST::ComStore>(std::move(L), MemTreatment(std::move(R)));
 		}
 
 		if(all_parser_mems.find(L->name) != all_parser_mems.end()) {
 
 			auto R = ParseExpression();
+
+			if(BorrowChecker::IsBorrowed(R->name)) {
+				ExprError(std::string(R->name) + " already borrowed!");
+			}
+
+			BorrowChecker::MoveVariable(R->name);
 
 			return std::make_unique<AST::MemStore>(Mem_Verify(std::move(L)), MemTreatment(std::move(R)));
 		}
