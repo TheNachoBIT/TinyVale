@@ -6,7 +6,7 @@ At the same time, i'm going to be documenting each step of this compiler to make
 
 ## Toying with TinyVale (For Beginners)
 
-- [Chapter 0: Toying With TinyVale](https://github.com/TheNachoBIT/TinyVale/blob/tutorial/0-Toying-With-TinyVale.md) (Coming Soon)
+- [Chapter 0: Toying with TinyVale](https://github.com/TheNachoBIT/TinyVale/blob/tutorial/0-Toying-With-TinyVale.md) (Coming Soon)
 
 ## Infrastructure Documentation
 
