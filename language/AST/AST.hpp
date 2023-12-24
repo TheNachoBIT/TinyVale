@@ -347,6 +347,79 @@ struct AST {
 		}
 	};
 
+	struct Item : public Expression {
+
+		EXPR_OBJ() value;
+
+		Item(EXPR_OBJ() target_in, EXPR_OBJ() value_in) {
+
+			if(target_in != nullptr) { target = std::move(target_in); }
+			if(value_in != nullptr) { value = std::move(value_in); }
+		}
+
+		llvm::Value* codegen() override;
+
+		std::string ToLLVale() override {
+
+			std::string res;
+
+			if(target != nullptr) {
+				if(target->ToLLValeBefore() != "") {
+
+					res += target->ToLLValeBefore();
+					res += "\n";
+					res += GetSlashT();
+				}
+			}
+
+			if(value != nullptr) {
+				if(value->ToLLValeBefore() != "") {
+
+					res += value->ToLLValeBefore();
+					res += "\n";
+					res += GetSlashT();
+				}
+			}
+
+			res += target->ToLLVale();
+			res += "[";
+			res += value->ToLLVale();
+			res += "]";
+
+			return res;
+		}
+
+		DEFAULT_TOLLVALEBEFORE()
+
+		void ReplaceTargetNameTo(std::string from, std::string to) override {
+
+			if(name == from) {
+				name = to;
+			}
+
+			if(target != nullptr) { target->ReplaceTargetNameTo(from, to); }
+			if(value != nullptr) { value->ReplaceTargetNameTo(from, to); }
+		}
+
+		bool ContainsName(std::string str) override {
+
+			if(target != nullptr && value != nullptr) {
+				return name == str || target->ContainsName(str) || value->ContainsName(str);
+			}
+
+			return name == str;
+		}
+
+		EXPR_OBJ() Clone() override {
+
+			if(target != nullptr && value != nullptr) {
+				return std::make_unique<Item>(target->Clone(), value->Clone());
+			}
+
+			return std::make_unique<Item>(nullptr, nullptr);
+		}
+	};
+
 	struct RetVoid : public Expression {
 
 		RetVoid() {}
@@ -1514,6 +1587,8 @@ struct AST {
 
 	static llvm::Value* GetOrigin(std::string name);
 	static llvm::Value* GetCurrent(std::string name);
+
+	static bool IsCom(std::string name);
 };
 
 #endif

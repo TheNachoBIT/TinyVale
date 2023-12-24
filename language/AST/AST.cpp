@@ -181,6 +181,37 @@ llvm::Value* AST::Mem::codegen() {
 	return CodeGen::all_mems[name]->origin;
 }
 
+llvm::Value* AST::Item::codegen() {
+
+	if(AST::IsCom(target->name)) {
+
+		llvm::Value* T = AST::GetOrCreateInstruction(target.get());
+		llvm::Value* V = AST::GetOrCreateInstruction(value.get());
+
+		if(!T) { std::cout << "CodeGen Error: 'T' not found.\n"; exit(1); }
+		if(!V) { std::cout << "CodeGen Error: 'V' not found.\n"; exit(1); }
+
+		unsigned int finalIndex = 0;
+
+		if (llvm::ConstantInt* CI = dyn_cast<llvm::ConstantInt>(V)) {
+			finalIndex = CI->getSExtValue();
+		}
+		else {
+			std::cout << "CodeGen Error: 'V' is not 'com'.\n"; exit(1);
+		}
+
+		std::cout << "Item FinalIndex is: " << finalIndex << "\n";
+
+		unsigned int indexList[1] = { finalIndex };
+
+		return CodeGen::Builder->CreateExtractValue(T, llvm::ArrayRef<unsigned int>(indexList, 1));
+	}
+
+	std::cout << "'mem' arrays not supported yet.\n";
+	exit(1);
+	return nullptr;
+}
+
 llvm::Value* AST::Add::codegen() {
 
 	llvm::Value* L = AST::GetOrCreateInstruction(target.get());
@@ -189,6 +220,33 @@ llvm::Value* AST::Add::codegen() {
 	std::string finalName = std::string("add") + target->name;
 
 	llvm::Value* result = CodeGen::Builder->CreateAdd(L, R, finalName.c_str());
+
+	if(dynamic_cast<AST::Item*>(target.get())) {
+
+		std::cout << "Processing Item in Add...\n";
+
+		auto getItem = dynamic_cast<AST::Item*>(target.get());
+		auto getItemValue = AST::GetOrCreateInstruction(getItem->value.get());
+
+		unsigned int finalIndex = 0;
+
+		if (llvm::ConstantInt* CI = dyn_cast<llvm::ConstantInt>(getItemValue)) {
+			finalIndex = CI->getSExtValue();
+		}
+		else {
+			std::cout << "CodeGen Error: 'V' is not 'com'.\n"; exit(1);
+		}
+
+		unsigned int indexList[1] = { finalIndex };
+
+		std::cout << "Add FinalIndex is: " << finalIndex << "\n";
+
+		auto E = CodeGen::Builder->CreateInsertValue(AST::GetOrCreateInstruction(getItem->target.get()), result, llvm::ArrayRef<unsigned int>(indexList, 1));
+
+		AST::AddInstruction(getItem->target.get(), E);
+
+		return result;
+	}
 
 	AST::AddInstruction(target.get(), result);
 
@@ -792,6 +850,10 @@ llvm::Value* AST::FindExistingState(std::string name, llvm::BasicBlock* bb) {
 	}
 
 	return nullptr;
+}
+
+bool AST::IsCom(std::string name) {
+	return CodeGen::all_coms.find(name) != CodeGen::all_coms.end();
 }
 
 /*

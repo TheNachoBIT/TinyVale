@@ -206,6 +206,23 @@ struct Parser {
 		return std::make_unique<AST::ProcedureCall>(std::move(body_clone), std::move(returnObj));
 	}
 
+	static std::unique_ptr<AST::Expression> ParseItem(std::string idName) {
+
+		std::cout << "Parsing Item...\n";
+
+		Lexer::GetNextToken();
+
+		auto E = ParseExpression();
+
+		if(Lexer::CurrentToken != ']') {
+			ExprError("Expected ']' to close item.");
+		}
+
+		Lexer::GetNextToken();
+
+		return std::make_unique<AST::Item>(std::make_unique<AST::Variable>(idName), std::move(E));
+	}
+
 	static std::unique_ptr<AST::Expression> ParseIdentifier() {
 
 		std::string idName = Lexer::IdentifierStr;
@@ -214,6 +231,9 @@ struct Parser {
 
 		if(Lexer::CurrentToken == '(') {
 			return ParseCall(idName);
+		}
+		else if(Lexer::CurrentToken == '[') {
+			return ParseItem(idName);
 		}
 
 		SetMainTarget(idName);
