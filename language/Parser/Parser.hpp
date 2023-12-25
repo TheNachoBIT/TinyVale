@@ -208,8 +208,6 @@ struct Parser {
 
 	static std::unique_ptr<AST::Expression> ParseItem(std::string idName) {
 
-		std::cout << "Parsing Item...\n";
-
 		Lexer::GetNextToken();
 
 		auto E = ParseExpression();

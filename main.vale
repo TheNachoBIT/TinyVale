@@ -1,11 +1,22 @@
-exported funky main() {
+program main() {
 	
-	com a int = 1;
-	com b int = 2;
-	com c int = 3;
+	com exampleArray [int, 5];
 
-	a += c;
-	b += c;
+	com someNumber int = 30;
 
-	return c;
+	exampleArray[4] += 3;
+	exampleArray[4] += 6;
+	exampleArray[4] += 9;
+
+	exampleArray[3] += 3;
+	exampleArray[3] += 6;
+	exampleArray[3] += 9;
+
+	exampleArray[4] += exampleArray[3];
+
+	if COMPARE.IsMoreThan(exampleArray[4], 10) {
+		exampleArray[4] += someNumber;
+	};
+
+	return exampleArray[4];
 }

@@ -200,8 +200,6 @@ llvm::Value* AST::Item::codegen() {
 			std::cout << "CodeGen Error: 'V' is not 'com'.\n"; exit(1);
 		}
 
-		std::cout << "Item FinalIndex is: " << finalIndex << "\n";
-
 		unsigned int indexList[1] = { finalIndex };
 
 		return CodeGen::Builder->CreateExtractValue(T, llvm::ArrayRef<unsigned int>(indexList, 1));
@@ -210,6 +208,29 @@ llvm::Value* AST::Item::codegen() {
 	std::cout << "'mem' arrays not supported yet.\n";
 	exit(1);
 	return nullptr;
+}
+
+llvm::Value* ProcessItem(AST::Expression* target, llvm::Value* result) {
+
+	auto getItem = dynamic_cast<AST::Item*>(target);
+	auto getItemValue = AST::GetOrCreateInstruction(getItem->value.get());
+
+	unsigned int finalIndex = 0;
+
+	if (llvm::ConstantInt* CI = dyn_cast<llvm::ConstantInt>(getItemValue)) {
+		finalIndex = CI->getSExtValue();
+	}
+	else {
+		std::cout << "CodeGen Error: 'V' is not 'com'.\n"; exit(1);
+	}
+
+	unsigned int indexList[1] = { finalIndex };
+
+	auto E = CodeGen::Builder->CreateInsertValue(AST::GetOrCreateInstruction(getItem->target.get()), result, llvm::ArrayRef<unsigned int>(indexList, 1));
+
+	AST::AddInstruction(getItem->target.get(), E);
+
+	return result;
 }
 
 llvm::Value* AST::Add::codegen() {
@@ -222,30 +243,7 @@ llvm::Value* AST::Add::codegen() {
 	llvm::Value* result = CodeGen::Builder->CreateAdd(L, R, finalName.c_str());
 
 	if(dynamic_cast<AST::Item*>(target.get())) {
-
-		std::cout << "Processing Item in Add...\n";
-
-		auto getItem = dynamic_cast<AST::Item*>(target.get());
-		auto getItemValue = AST::GetOrCreateInstruction(getItem->value.get());
-
-		unsigned int finalIndex = 0;
-
-		if (llvm::ConstantInt* CI = dyn_cast<llvm::ConstantInt>(getItemValue)) {
-			finalIndex = CI->getSExtValue();
-		}
-		else {
-			std::cout << "CodeGen Error: 'V' is not 'com'.\n"; exit(1);
-		}
-
-		unsigned int indexList[1] = { finalIndex };
-
-		std::cout << "Add FinalIndex is: " << finalIndex << "\n";
-
-		auto E = CodeGen::Builder->CreateInsertValue(AST::GetOrCreateInstruction(getItem->target.get()), result, llvm::ArrayRef<unsigned int>(indexList, 1));
-
-		AST::AddInstruction(getItem->target.get(), E);
-
-		return result;
+		return ProcessItem(target.get(), result);
 	}
 
 	AST::AddInstruction(target.get(), result);
@@ -262,6 +260,10 @@ llvm::Value* AST::Sub::codegen() {
 
 	llvm::Value* result = CodeGen::Builder->CreateSub(L, R, finalName.c_str());
 
+	if(dynamic_cast<AST::Item*>(target.get())) {
+		return ProcessItem(target.get(), result);
+	}
+
 	AST::AddInstruction(target.get(), result);
 
 	return result;
@@ -275,6 +277,10 @@ llvm::Value* AST::And::codegen() {
 	std::string finalName = std::string("and") + target->name;
 
 	llvm::Value* result = CodeGen::Builder->CreateAnd(L, R, finalName.c_str());
+
+	if(dynamic_cast<AST::Item*>(target.get())) {
+		return ProcessItem(target.get(), result);
+	}
 
 	AST::AddInstruction(target.get(), result);
 
@@ -290,6 +296,10 @@ llvm::Value* AST::Or::codegen() {
 
 	llvm::Value* result = CodeGen::Builder->CreateOr(L, R, finalName.c_str());
 
+	if(dynamic_cast<AST::Item*>(target.get())) {
+		return ProcessItem(target.get(), result);
+	}
+
 	AST::AddInstruction(target.get(), result);
 
 	return result;
@@ -303,6 +313,10 @@ llvm::Value* AST::Xor::codegen() {
 	std::string finalName = std::string("xor") + target->name;
 
 	llvm::Value* result = CodeGen::Builder->CreateXor(L, R, finalName.c_str());
+
+	if(dynamic_cast<AST::Item*>(target.get())) {
+		return ProcessItem(target.get(), result);
+	}
 
 	AST::AddInstruction(target.get(), result);
 
