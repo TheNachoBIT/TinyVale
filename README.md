@@ -1,4 +1,4 @@
-# TinyVale
+![TinyVale Logo](https://raw.githubusercontent.com/TheNachoBIT/TinyVale/main/design/logo.png)
 
 An attempt to make [**Vale's Compiler**](https://github.com/ValeLang/Vale) more tiny and easy to work with, and also by adding some of the technical quirks from a programming language i've been working for a while called [**Mascal**](https://github.com/mascal-lang/mascal).
 
