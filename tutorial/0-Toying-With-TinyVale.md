@@ -20,5 +20,7 @@ Despite this being a beginners guide, it is recommended to already have at least
 
 Let's begin with how the TinyVale works in a nutshell...
 
+**See you in the next chapter!**
+
 [1.- How TinyVale Works](1-How-TinyVale-Works)
 
