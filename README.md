@@ -4,9 +4,10 @@ An attempt to make [**Vale's Compiler**](https://github.com/ValeLang/Vale) more 
 
 At the same time, i'm going to be documenting each step of this compiler to make sure everyone understands the internals of it, and hopefully it'll be easier for people to contribute.
 
-## Toying with TinyVale (For Beginners)
+## Toying with TinyVale (1 chapter done)
 
-- [Chapter 0: Toying with TinyVale](https://github.com/TheNachoBIT/TinyVale/blob/main/tutorial/0-Toying-With-TinyVale.md) (Coming Soon)
+- [Chapter 0: Toying with TinyVale](https://github.com/TheNachoBIT/TinyVale/blob/main/tutorial/0-Toying-With-TinyVale.md)
+- [Chapter 1: How TinyVale Works](https://github.com/TheNachoBIT/TinyVale/blob/main/tutorial/1-How-TinyVale-Works.md) (Coming Soon)
 
 ## Infrastructure Documentation
 
