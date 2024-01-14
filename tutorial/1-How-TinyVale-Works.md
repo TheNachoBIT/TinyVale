@@ -14,4 +14,5 @@ In this section, you're going to learn how the entire TinyVale Compiler works!
 ![This is you](src/this-is-you.png)
 ![So you go to...](src/so-you-go-to.png)
 ![Hello sir...](src/hello-sir.png)
+![Okay sure...](src/okay-sure.png)
 *-- WIP --*
