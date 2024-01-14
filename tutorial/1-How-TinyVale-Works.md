@@ -12,4 +12,6 @@ In this section, you're going to learn how the entire TinyVale Compiler works!
 **This is the best place to get your Tiny Car in no time!** Let's explain the whole ***INCREDIBLE PROCESS FROM START TO FINISH!***
 
 ![This is you](src/this-is-you.png)
+![So you go to...](src/so-you-go-to.png)
+![Hello sir...](src/hello-sir.png)
 *-- WIP --*
